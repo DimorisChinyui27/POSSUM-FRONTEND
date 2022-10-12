@@ -24,3 +24,7 @@ a {
     background: black;
   }
 }
+.modalStyle .ant-modal-content {
+  /* background-color: #01579b; */
+  border-radius: 10px;
+}

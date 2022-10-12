@@ -1,0 +1,11 @@
+.panelFill{
+    background-color: #0071ff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: left;
+    padding-right: 50px;
+}
+.main{
+    min-height: 100vh;
+}

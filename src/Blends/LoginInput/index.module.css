@@ -1,0 +1,9 @@
+.inputClass{
+width: 100%;max-width: 350px;
+ height: 40px; 
+padding-left: 15px;
+padding-top:10px;
+padding-bottom: 10px;
+/*background-color: red;*/
+margin-bottom: 5px;
+box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;}

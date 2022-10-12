@@ -1,0 +1,48 @@
+.mandatory{
+    color:red
+}
+.panelFill{
+    background-color: #0071ff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: left;
+    padding-right: 50px;
+}
+.main{
+    min-height: 100vh;
+    display: flex;
+   justify-content: center;
+    align-items: center;
+    width: 100%;
+ 
+}
+.inputClass{
+    width: 100%;max-width: 350px;
+border-top: 0px;
+border-left: 0px;
+border-right: 0px;
+border-bottom: 2px solid #e1e1e1;
+outline: none;
+    /* box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
+}
+    .iconStyles{
+        margin-right: 5px;
+    }
+
+.alignRight{
+    display: flex;
+    align-items: flex-end;
+    justify-content: right;
+}
+.alignCenter{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.topMargin{
+    padding-top: 7px;
+}
+.link{
+    cursor: pointer;
+}

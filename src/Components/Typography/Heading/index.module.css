@@ -1,0 +1,13 @@
+.heading{
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 1;
+    font-size: 22px;
+    font-weight: 700;
+
+}
+.active{
+    color:#295074;
+}
+.passive{
+    color:#fff;
+}
