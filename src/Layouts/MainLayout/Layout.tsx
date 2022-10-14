@@ -16,7 +16,13 @@ export default function Layout({ LeftPanel }: layoutProps) {
 				md={24}
 				lg={24}
 				xl={24}
-				style={{ width: "100%", maxWidth: 1000, height: 1400 }}
+				style={{
+					width: "100%",
+					//maxWidth: 1000,
+					height: "100%",
+					paddingTop: 20,
+					paddingBottom: 20,
+				}}
 			>
 				<LeftPanel />
 			</Col>

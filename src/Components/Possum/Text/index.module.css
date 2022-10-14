@@ -1,0 +1,9 @@
+.possumText{
+    background: -webkit-linear-gradient(#66d1de, #de41f5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 21px;
+    font-weight: bolder;
+    letter-spacing: 5px,
+
+}

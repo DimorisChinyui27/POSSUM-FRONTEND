@@ -90,7 +90,7 @@ export default function PaymentOptions({
 							width: 300,
 							height: 150,
 							objectFit: "fill",
-							backgroundImage: "url(/payooneer.png)",
+							backgroundImage: "url(/venmo-logo.png)",
 							borderRadius: 12,
 							boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
 						}}
@@ -162,11 +162,12 @@ export default function PaymentOptions({
 					fontWeight: "lighter",
 					letterSpacing: 1,
 					fontSize: 15,
+					color: "#9f8fe9",
 				}}
 				className={styles.btn}
 				onClick={() => setActiveDiv(activeDiv - 1)}
 			>
-				<SwapLeftOutlined style={{ color: "#85ace4", fontSize: 16 }} /> Go Back
+				Skip
 			</button>
 		</div>
 	);
@@ -187,11 +188,7 @@ const ModalContent = ({ activeDiv }: { activeDiv: number }) => {
 
 			<Typo.Desc
 				content={`Provide your ${
-					activeDiv === 0
-						? "credit card"
-						: activeDiv === 1
-						? "paypal"
-						: "payooneer"
+					activeDiv === 0 ? "credit card" : activeDiv === 1 ? "paypal" : "venmo"
 				}	information`}
 			/>
 
@@ -389,9 +386,9 @@ const ModalContent = ({ activeDiv }: { activeDiv: number }) => {
 			{activeDiv === 2 && (
 				<div>
 					<Space direction="vertical" style={{ width: "100%", paddingTop: 15 }}>
-						<Typo.Label title="Payoneer Email" />
+						<Typo.Label title="Venmo Email, Username or Password" />
 						<Input
-							placeholder="Type your payoneer email"
+							placeholder="Type your venmo email or username"
 							size="large"
 							// onChange={(e) => {
 							// 	setEmail(e.target.value);

@@ -1,28 +1,31 @@
-import { Button, Typo } from "../../../Components";
+import { Button, Typo, Possum } from "../../../Components";
 import { Row, Col, Space, Input, Popover } from "antd";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { User } from "src/Interfaces";
 import { MdAlternateEmail, MdFacebook } from "react-icons/md";
-import { AiFillTwitterCircle } from "react-icons/ai";
+import { AiFillInstagram } from "react-icons/ai";
+import { SiGmail } from "react-icons/si";
 
 import styles from "./index.module.css";
 import { UserOutlined, LockOutlined, UnlockOutlined } from "@ant-design/icons";
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
-// import IntroTemplate from "../Intro";
-// import { LoginInput } from "src/Blends/LoginInput";
+
 const LoginTemplate = () => {
 	return (
-		<Row
-			className={styles.main}
-			// style={{
-			// 	display: "flex",
-			// 	alignItems: "center",
-			// 	justifyContent: "center",
-			// }}
-		>
-			<Col xs={22} sm={22} md={16} lg={12} xl={12}>
+		<Row className={styles.main}>
+			<Col
+				xs={22}
+				sm={22}
+				md={24}
+				lg={24}
+				xl={24}
+				style={{
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+				}}
+			>
 				<LoginFunc />
 			</Col>
 		</Row>
@@ -45,9 +48,9 @@ function LoginFunc() {
 			direction="vertical"
 			style={{
 				width: "100%",
-				paddingTop: 50,
+				paddingTop: 10,
 				paddingBottom: 50,
-				maxWidth: "100%",
+				maxWidth: 450,
 				alignItems: "center",
 				justifyContent: "center",
 				//border: "1px solid red",
@@ -57,13 +60,14 @@ function LoginFunc() {
 					"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
 			}}
 		>
+			<Possum.PossumLogo />
 			<Typo.Heading title="Login" classType="active" />
 			<br />
 
 			<form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
 				<Space
 					direction="vertical"
-					style={{ width: "100%", paddingBottom: 100 }}
+					style={{ width: "100%", paddingBottom: 40 }}
 				>
 					<Typo.Label title="Email" direction="left" />
 					<Input
@@ -144,12 +148,29 @@ function LoginFunc() {
 							className={styles.link}
 							style={{ cursor: "pointer" }}
 						>
-							<Popover content="Twitter">
-								<AiFillTwitterCircle
+							<Popover content="Instagram">
+								<AiFillInstagram
 									style={{
 										fontSize: 30,
 										color: "#4aa0e9",
-										//cursor: "pointer",
+										cursor: "pointer",
+									}}
+								/>
+							</Popover>
+						</Link>
+						<Link
+							href={"/signup"}
+							className={styles.link}
+							style={{ cursor: "pointer" }}
+						>
+							<Popover content="Gmail">
+								<SiGmail
+									style={{
+										fontSize: 25,
+										marginLeft: 5,
+
+										color: "red",
+										cursor: "pointer",
 									}}
 								/>
 							</Popover>
@@ -171,7 +192,7 @@ function LoginFunc() {
 								/>
 							</Popover>
 						</Link>
-						<Link
+						{/* <Link
 							href={"/signup"}
 							className={styles.link}
 							style={{ cursor: "pointer" }}
@@ -185,10 +206,11 @@ function LoginFunc() {
 									}}
 								/>
 							</Popover>
-						</Link>
+						</Link> */}
 					</div>
 				</Space>
 			</form>
+			<Possum.PossumText />
 		</Space>
 	);
 }

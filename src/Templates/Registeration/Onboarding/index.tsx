@@ -1,30 +1,30 @@
-import { Button, Typo } from "src/Components";
+import { Typo } from "src/Components";
 import {
-	Row,
-	Carousel,
-	Col,
-	Space,
+	//Row,
+	//Carousel,
+	//Col,
+	//Space,
 	Steps,
 	DatePicker,
 	Tooltip,
-	Input,
+	//Input,
 	Select,
 	Popover,
 } from "antd";
 import moment from "moment";
 import { TbYoga } from "react-icons/tb";
 
-import {
-	// LoadingOutlined,
-	SmileOutlined,
-	SolutionOutlined,
-	SwapLeftOutlined,
-	//	UserOutlined,
-} from "@ant-design/icons";
+// import {
+// 	// LoadingOutlined,
+// 	SmileOutlined,
+// 	SolutionOutlined,
+// 	SwapLeftOutlined,
+// 	//	UserOutlined,
+// } from "@ant-design/icons";
 
 import styles from "./index.module.css";
 import React from "react";
-import Image from "next/image";
+//import Image from "next/image";
 import PaymentOptions from "./PaymentOptions";
 const { Step } = Steps;
 const dateFormat = "DD/MM/YYYY";
@@ -34,13 +34,10 @@ export default function OnboardingTemplate() {
 	const [activeStep, setActiveStep] = React.useState<number>(0);
 	const [language, setLanguage] = React.useState<string>("");
 	const [topicOfInterest, setTopicOfInterest] = React.useState([]);
-	const [stepsData, setStepsData] = React.useState([]);
 	const handleChange = (value: string) => {
-		//console.log(`selected ${value}`);
 		setLanguage(value);
 	};
 	const pushToInterests = (value: string) => {
-		//console.log(`selected ${value}`);
 		if (topicOfInterest.findIndex((item: string) => item === value) < 0) {
 			let temp: any = [...topicOfInterest];
 			temp.push(value);
@@ -155,7 +152,7 @@ export default function OnboardingTemplate() {
 									<Option value="English">English</Option>
 									<Option value="French">French</Option>
 									<Option value="German">German</Option>
-									<Option value="Spanish">Spanish</Option>
+									<Option value="Italian">Italian</Option>
 								</Select>
 							</div>
 							<div className={styles.colLeftAlign}>
@@ -168,10 +165,13 @@ export default function OnboardingTemplate() {
 									onChange={pushToInterests}
 									size="large"
 								>
-									<Option value="English">English</Option>
-									<Option value="French">French</Option>
-									<Option value="German">German</Option>
-									<Option value="Spanish">Spanish</Option>{" "}
+									{children.map((item, index) => {
+										return (
+											<Option value={item} key={index}>
+												{item}
+											</Option>
+										);
+									})}
 								</Select>
 							</div>
 						</div>
@@ -188,76 +188,6 @@ export default function OnboardingTemplate() {
 							flexDirection: "column",
 						}}
 					>
-						{/* <Typo.Heading title="Choose Payment Method" classType="passive" />
-							{/* <Typo.SubHeading title="Let's get you onboarded" /> */}
-						{/*		<Carousel
-								afterChange={onChange}
-								style={{
-									backgroundColor: "pink",
-									maxWidth: 450,
-									borderRadius: 12,
-									width: "100%",
-									height: 200,
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
-								}}
-							>
-								<div
-									style={{
-										display: "flex",
-										alignItems: "center",
-										justifyContent: "center",
-									}}
-								>
-									<img
-										src={"/payooneer.png"}
-										style={{
-											objectFit: "fill",
-											width: 300,
-											height: 150,
-											borderRadius: 6,
-											cursor: "pointer",
-										}}
-									/>
-								</div>
-								<div
-									style={{
-										display: "flex",
-										alignItems: "center",
-										justifyContent: "center",
-									}}
-								>
-									<img
-										src={"paypal.png"}
-										style={{
-											objectFit: "fill",
-											width: 300,
-											height: 150,
-											borderRadius: 6,
-											cursor: "pointer",
-										}}
-									/>
-								</div>
-								<div
-									style={{
-										display: "flex",
-										alignItems: "center",
-										justifyContent: "center",
-									}}
-								>
-									<img
-										src={"american.png"}
-										style={{
-											objectFit: "fill",
-											width: 300,
-											height: 150,
-											borderRadius: 6,
-											cursor: "pointer",
-										}}
-									/>
-								</div>
-							</Carousel> */}
 						<PaymentOptions
 							activeStep={activeStep}
 							setActiveStep={setActiveStep}
@@ -288,187 +218,187 @@ export default function OnboardingTemplate() {
 		</div>
 	);
 }
-const FinancialInfo = () => {
-	const [activeOption, setActiveOption] = React.useState(0);
-	const [cardNumber, setCardNumber] = React.useState("");
-	const [expiryMonth, setExpiryMonth] = React.useState("");
-	const [expiryYear, setExpiryYear] = React.useState("");
-	const [email, setEmail] = React.useState("");
-	const [Cvv, setCvv] = React.useState("");
+// const FinancialInfo = () => {
+// 	const [activeOption, setActiveOption] = React.useState(0);
+// 	const [cardNumber, setCardNumber] = React.useState("");
+// 	const [expiryMonth, setExpiryMonth] = React.useState("");
+// 	const [expiryYear, setExpiryYear] = React.useState("");
+// 	const [email, setEmail] = React.useState("");
+// 	const [Cvv, setCvv] = React.useState("");
 
-	const SubmitDetails = () => {};
-	return (
-		<div style={{ width: "100%" }}>
-			<Row
-				style={{
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-					width: "100%",
-					maxWidth: "100%",
-				}}
-			>
-				<Col xs={24} sm={24} md={12} lg={7} xl={7}>
-					<img
-						src={"american.png"}
-						style={{
-							objectFit: "contain",
-							width: 150,
-							height: 65,
-							borderRadius: 6,
-							border: activeOption === 0 ? "1px solid #0071ff" : 0,
-							cursor: "pointer",
-						}}
-						onClick={() => {
-							setActiveOption(0);
-						}}
-					/>
-				</Col>
-				<Col xs={24} sm={24} md={12} lg={7} xl={7}>
-					<img
-						src={"payooneer.png"}
-						style={{
-							objectFit: "contain",
-							width: 150,
-							height: 65,
-							borderRadius: 6,
-							border: activeOption === 1 ? "1px solid #0071ff" : 0,
-							cursor: "pointer",
-						}}
-						onClick={() => {
-							setActiveOption(1);
-						}}
-					/>
-				</Col>
-				<Col xs={24} sm={24} md={12} lg={7} xl={7}>
-					<img
-						src={"paypal.png"}
-						style={{
-							objectFit: "contain",
-							width: 150,
-							height: 65,
-							borderRadius: 6,
-							border: activeOption === 2 ? "1px solid #0071ff" : 0,
-							cursor: "pointer",
-						}}
-						onClick={() => {
-							setActiveOption(2);
-						}}
-					/>
-				</Col>
-			</Row>
-			{activeOption === 0 && (
-				<div
-					style={{
-						width: "100%",
-						paddingTop: 15,
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
-						flexDirection: "column",
-					}}
-				>
-					<Typo.Label title="Card Number" />
-					<Input
-						placeholder="Enter your Card Number"
-						size="large"
-						onChange={(e) => {
-							setCardNumber(e.target.value);
-						}}
-					/>
-					<div style={{ paddingTop: 5 }}></div>
+// 	const SubmitDetails = () => {};
+// 	return (
+// 		<div style={{ width: "100%" }}>
+// 			<Row
+// 				style={{
+// 					display: "flex",
+// 					alignItems: "center",
+// 					justifyContent: "center",
+// 					width: "100%",
+// 					maxWidth: "100%",
+// 				}}
+// 			>
+// 				<Col xs={24} sm={24} md={12} lg={7} xl={7}>
+// 					<img
+// 						src={"american.png"}
+// 						style={{
+// 							objectFit: "contain",
+// 							width: 150,
+// 							height: 65,
+// 							borderRadius: 6,
+// 							border: activeOption === 0 ? "1px solid #0071ff" : 0,
+// 							cursor: "pointer",
+// 						}}
+// 						onClick={() => {
+// 							setActiveOption(0);
+// 						}}
+// 					/>
+// 				</Col>
+// 				<Col xs={24} sm={24} md={12} lg={7} xl={7}>
+// 					<img
+// 						src={"payooneer.png"}
+// 						style={{
+// 							objectFit: "contain",
+// 							width: 150,
+// 							height: 65,
+// 							borderRadius: 6,
+// 							border: activeOption === 1 ? "1px solid #0071ff" : 0,
+// 							cursor: "pointer",
+// 						}}
+// 						onClick={() => {
+// 							setActiveOption(1);
+// 						}}
+// 					/>
+// 				</Col>
+// 				<Col xs={24} sm={24} md={12} lg={7} xl={7}>
+// 					<img
+// 						src={"paypal.png"}
+// 						style={{
+// 							objectFit: "contain",
+// 							width: 150,
+// 							height: 65,
+// 							borderRadius: 6,
+// 							border: activeOption === 2 ? "1px solid #0071ff" : 0,
+// 							cursor: "pointer",
+// 						}}
+// 						onClick={() => {
+// 							setActiveOption(2);
+// 						}}
+// 					/>
+// 				</Col>
+// 			</Row>
+// 			{activeOption === 0 && (
+// 				<div
+// 					style={{
+// 						width: "100%",
+// 						paddingTop: 15,
+// 						display: "flex",
+// 						alignItems: "center",
+// 						justifyContent: "center",
+// 						flexDirection: "column",
+// 					}}
+// 				>
+// 					<Typo.Label title="Card Number" />
+// 					<Input
+// 						placeholder="Enter your Card Number"
+// 						size="large"
+// 						onChange={(e) => {
+// 							setCardNumber(e.target.value);
+// 						}}
+// 					/>
+// 					<div style={{ paddingTop: 5 }}></div>
 
-					<Row
-					// 	style={{
-					// 		display: "flex",
-					// 		alignItems: "center",
-					// 		justifyContent: "center",
-					// 	}}
-					//
-					>
-						<Col xs={8} sm={8} md={6} lg={2} xl={2}>
-							<Space direction="vertical">
-								<Typo.Label title="Month" />
-								<Input
-									placeholder="00"
-									size="large"
-									style={{ width: "100%", maxWidth: 50 }}
-									onChange={(e) => {
-										setExpiryMonth(e.target.value);
-									}}
-								/>
-							</Space>
-						</Col>
-						<Col xs={8} sm={8} md={6} lg={1} xl={1}>
-							{/* <p style={{ fontSize: 20, paddingTop: 30 }}>/</p> */}
-						</Col>
-						<Col xs={8} sm={8} md={6} lg={2} xl={2}>
-							<Space direction="vertical">
-								<Typo.Label title="Year" />
-								<Input
-									placeholder="00"
-									size="large"
-									style={{ width: 45 }}
-									onChange={(e) => {
-										setExpiryYear(e.target.value);
-									}}
-								/>
-							</Space>
-						</Col>
-						<Col xs={24} sm={24} md={12} lg={9} xl={9}></Col>
-						<Col xs={24} sm={24} md={12} lg={8} xl={8}>
-							<Space direction="vertical">
-								<Typo.Label title="CVV" />
-								<Input
-									placeholder="Enter CVV"
-									size="large"
-									style={{ width: "100%", maxWidth: 100 }}
-									onChange={(e) => {
-										setCvv(e.target.value);
-									}}
-								/>
-							</Space>
-						</Col>
-					</Row>
-				</div>
-			)}
-			{activeOption === 1 && (
-				<Space direction="vertical" style={{ width: "100%", paddingTop: 15 }}>
-					<Typo.Label title="Payooneer Email" />
-					<Input
-						placeholder="Enter payooneer's email"
-						size="large"
-						onChange={(e) => {
-							setEmail(e.target.value);
-						}}
-					/>
-				</Space>
-			)}
-			{activeOption === 2 && (
-				<Space direction="vertical" style={{ width: "100%", paddingTop: 15 }}>
-					<Typo.Label title="Paypal Email" />
-					<Input
-						placeholder="Enter paypal email"
-						size="large"
-						onChange={(e) => {
-							setEmail(e.target.value);
-						}}
-					/>
-				</Space>
-			)}
-			<br />
-			<button type="button" onClick={SubmitDetails} className={styles.primary}>
-				Submit
-			</button>
-		</div>
-	);
-};
+// 					<Row
+// 					// 	style={{
+// 					// 		display: "flex",
+// 					// 		alignItems: "center",
+// 					// 		justifyContent: "center",
+// 					// 	}}
+// 					//
+// 					>
+// 						<Col xs={8} sm={8} md={6} lg={2} xl={2}>
+// 							<Space direction="vertical">
+// 								<Typo.Label title="Month" />
+// 								<Input
+// 									placeholder="00"
+// 									size="large"
+// 									style={{ width: "100%", maxWidth: 50 }}
+// 									onChange={(e) => {
+// 										setExpiryMonth(e.target.value);
+// 									}}
+// 								/>
+// 							</Space>
+// 						</Col>
+// 						<Col xs={8} sm={8} md={6} lg={1} xl={1}>
+// 							{/* <p style={{ fontSize: 20, paddingTop: 30 }}>/</p> */}
+// 						</Col>
+// 						<Col xs={8} sm={8} md={6} lg={2} xl={2}>
+// 							<Space direction="vertical">
+// 								<Typo.Label title="Year" />
+// 								<Input
+// 									placeholder="00"
+// 									size="large"
+// 									style={{ width: 45 }}
+// 									onChange={(e) => {
+// 										setExpiryYear(e.target.value);
+// 									}}
+// 								/>
+// 							</Space>
+// 						</Col>
+// 						<Col xs={24} sm={24} md={12} lg={9} xl={9}></Col>
+// 						<Col xs={24} sm={24} md={12} lg={8} xl={8}>
+// 							<Space direction="vertical">
+// 								<Typo.Label title="CVV" />
+// 								<Input
+// 									placeholder="Enter CVV"
+// 									size="large"
+// 									style={{ width: "100%", maxWidth: 100 }}
+// 									onChange={(e) => {
+// 										setCvv(e.target.value);
+// 									}}
+// 								/>
+// 							</Space>
+// 						</Col>
+// 					</Row>
+// 				</div>
+// 			)}
+// 			{activeOption === 1 && (
+// 				<Space direction="vertical" style={{ width: "100%", paddingTop: 15 }}>
+// 					<Typo.Label title="Payooneer Email" />
+// 					<Input
+// 						placeholder="Enter payooneer's email"
+// 						size="large"
+// 						onChange={(e) => {
+// 							setEmail(e.target.value);
+// 						}}
+// 					/>
+// 				</Space>
+// 			)}
+// 			{activeOption === 2 && (
+// 				<Space direction="vertical" style={{ width: "100%", paddingTop: 15 }}>
+// 					<Typo.Label title="Paypal Email" />
+// 					<Input
+// 						placeholder="Enter paypal email"
+// 						size="large"
+// 						onChange={(e) => {
+// 							setEmail(e.target.value);
+// 						}}
+// 					/>
+// 				</Space>
+// 			)}
+// 			<br />
+// 			<button type="button" onClick={SubmitDetails} className={styles.primary}>
+// 				Submit
+// 			</button>
+// 		</div>
+// 	);
+// };
 
-const contentStyle: React.CSSProperties = {
-	height: "160px",
-	color: "#fff",
-	lineHeight: "160px",
-	textAlign: "center",
-	background: "/american.png",
-	borderRadius: 20,
-};
+// const contentStyle: React.CSSProperties = {
+// 	height: "160px",
+// 	color: "#fff",
+// 	lineHeight: "160px",
+// 	textAlign: "center",
+// 	background: "/american.png",
+// 	borderRadius: 20,
+// };
