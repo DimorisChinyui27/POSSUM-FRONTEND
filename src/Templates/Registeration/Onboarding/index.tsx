@@ -157,7 +157,7 @@ export default function OnboardingTemplate() {
 							</div>
 							<div className={styles.colLeftAlign}>
 								{" "}
-								<Typo.Label title="Topic of Interest" />
+								<Typo.Label title="What do you know about" />
 								<Select
 									mode="tags"
 									className={styles.allInputs}

@@ -1,0 +1,162 @@
+.primary{
+    width: 100%;
+    background: linear-gradient(to right,#66d1de, #de41f5);    ;
+    border-radius: 22px;
+    border:0px;
+    color:#fff;
+    font-size: 16px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    max-width: 300px;
+    height: 48px;
+    cursor: pointer;
+   
+}
+.disabledPrimary{
+    width: 100%;
+    background: #bababa;
+    border-radius: 22px;
+    border:0px;
+    color:#fff;
+    font-size: 16px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    max-width: 300px;
+    height: 48px;
+    cursor: pointer;
+   
+}
+.focused{
+    background: -webkit-linear-gradient(#66d1de, #de41f5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 21px;
+    font-weight: bolder;
+    letter-spacing: 5px,
+
+}
+.dashboardContent{
+    display: flex;
+    /* align-items: center;
+    justify-content: center; */
+    flex-direction: column;
+     padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    /* border: 1px solid gray; */
+    border-radius: 12px;
+}
+.post{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 7px;
+    /* padding: 5px; */
+    /* border-radius: 13px; */
+    /* box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px; */
+}
+.postHeader{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    flex-direction: row;
+     padding-left: 5px; 
+}
+.postedBy{
+    color:#000;
+    font-size: 14px;
+    font-weight: normal;padding-right: 5px;
+    font-weight: 600;
+}
+.date{
+    font-size: 11px;
+    font-weight: bold;
+    color: #9c9e9d; padding-left: 5px;
+}
+.postQuestion{
+    color:#000;
+    font-size: 14px;
+    padding:5px;
+}
+.alignStart{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 100%;
+}
+.bottomInteractions{
+    padding-left: 5px;
+    padding-right: 5px;
+    align-items: center;justify-content: center;
+    display:flex;
+}
+.postedByImage{
+    border-radius: 30px / 2;
+    object-fit: cover;
+    background-color: #fff;
+    margin-right: 5px;
+    box-shadow:rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+
+
+}
+.modalStyle .ant-modal-content {
+    /* background-color: #01579b; */
+    border-radius: 10px;
+    background-color:#fff;
+  }
+  .downVote{
+    font-size: 22px;
+color:#9c9e9d;
+  }
+  
+  .upVote{
+    font-size: 22px;
+    font-weight: lighter;
+color: #9c9e9d;
+
+
+  }
+  .upVote:hover{
+    transform: translate(0, -3px);
+    color:#217537;
+  }
+  
+  .downVote:hover{
+    transform: translate(0, 3px);
+    color:#d90412;
+  }
+  .votes{
+    font-size: 13px;
+    font-weight: bolder;
+    letter-spacing: 1px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    color:#9c9e9d;
+
+  }
+  .votesDiv{
+    
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-top: 7px;
+       
+  }
+ .bountyAmount {
+    font-size: 14px;
+    font-weight: bold;
+    color: #de41f5;
+}
+.bountyLogo{
+    margin-right: 7px;
+    font-size: 17px;
+    font-weight: bold;
+    color:#66d1de;
+
+}
