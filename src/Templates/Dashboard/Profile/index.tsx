@@ -3,7 +3,11 @@ import React from "react";
 import Wallet from "../Wallet";
 import Image from "next/image";
 import { Possum } from "src/Components";
-import { MdOutlineTravelExplore } from "react-icons/md";
+import { MdOutlineTopic } from "react-icons/md";
+import { BsCardList } from "react-icons/bs";
+import { AiOutlineNotification } from "react-icons/ai";
+import { RiSecurePaymentFill } from "react-icons/ri";
+import { FaUserEdit } from "react-icons/fa";
 import styles from "./index.module.css";
 const Profile = () => {
 	const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
@@ -30,11 +34,11 @@ const Profile = () => {
 				<span className={styles.navTextActive}>Home</span>
 				<Image src={"/logo.png"} width={30} height={30} objectFit="contain" />
 			</div>
-
+			{/* 
 			<div className={styles.navOptDiv}>
 				<span className={styles.navTextNonActive}>Explore</span>
 				<MdOutlineTravelExplore size={22} className={styles.navIcon} />
-			</div>
+			</div> */}
 			<Wallet
 				isModalOpen={isModalOpen}
 				handleOk={handleOk}
@@ -43,12 +47,17 @@ const Profile = () => {
 
 			<div className={styles.navOptDiv}>
 				<span className={styles.navTextNonActive}>Notifications</span>
-				<MdOutlineTravelExplore size={22} className={styles.navIcon} />
+				<AiOutlineNotification size={22} className={styles.navIcon} />
 			</div>
 
 			<div className={styles.navOptDiv}>
 				<span className={styles.navTextNonActive}>Add Topic</span>
-				<MdOutlineTravelExplore size={22} className={styles.navIcon} />
+				<MdOutlineTopic size={22} className={styles.navIcon} />
+			</div>
+
+			<div className={styles.navOptDiv}>
+				<span className={styles.navTextNonActive}>Recent Questions</span>
+				<BsCardList size={22} className={styles.navIcon} />
 			</div>
 
 			<div
@@ -58,12 +67,12 @@ const Profile = () => {
 				}}
 			>
 				<span className={styles.navTextNonActive}>Add Payment Option</span>
-				<MdOutlineTravelExplore size={22} className={styles.navIcon} />
+				<RiSecurePaymentFill size={22} className={styles.navIcon} />
 			</div>
 
 			<div className={styles.navOptDiv}>
 				<span className={styles.navTextNonActive}>Edit Profile</span>
-				<MdOutlineTravelExplore size={22} className={styles.navIcon} />
+				<FaUserEdit size={22} className={styles.navIcon} />
 			</div>
 			<span
 				style={{
