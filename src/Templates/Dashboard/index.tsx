@@ -2037,7 +2037,7 @@ const AnswerTheQuestion = ({
 											>
 												<MdOutlineSlowMotionVideo />
 												&nbsp;
-												<span>{item.path}</span> &nbsp;
+												<span>{JSON.stringify(item) ?? ""}</span> &nbsp;
 												<DeleteOutlined
 													onClick={() => {
 														removeVideos(index);
