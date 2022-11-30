@@ -2026,7 +2026,7 @@ const AnswerTheQuestion = ({
 							}}
 						>
 							{answerVideo.length > 0
-								? answerVideo.map((item, index) => {
+								? answerVideo.map((item: any, index) => {
 										return (
 											<div
 												style={{
@@ -2037,7 +2037,7 @@ const AnswerTheQuestion = ({
 											>
 												<MdOutlineSlowMotionVideo />
 												&nbsp;
-												<span>{JSON.stringify(item) ?? ""}</span> &nbsp;
+												<span>{item.path ?? ""}</span> &nbsp;
 												<DeleteOutlined
 													onClick={() => {
 														removeVideos(index);
@@ -2060,7 +2060,7 @@ const AnswerTheQuestion = ({
 							}}
 						>
 							{answerImage.length > 0
-								? answerImage.map((item, index) => {
+								? answerImage.map((item: any, index) => {
 										return (
 											<div
 												style={{
