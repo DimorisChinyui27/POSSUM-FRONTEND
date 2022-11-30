@@ -28,14 +28,14 @@ export const SignupInput = ({
 			{type === "password" ? (
 				<Input.Password
 					placeholder={placeholder}
-					prefix={prefix ? <prefix.iconName /> : null}
+					prefix={prefix ? <prefix.IconName /> : null}
 					{...register(label, { required })}
 					className={styles.inputClass}
 				/>
 			) : (
 				<Input
 					placeholder={placeholder}
-					prefix={prefix ? <prefix.iconName /> : null}
+					prefix={prefix ? <prefix.IconName /> : null}
 					{...register(label, { required })}
 					className={styles.inputClass}
 				/>
