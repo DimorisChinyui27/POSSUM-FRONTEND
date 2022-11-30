@@ -1,20 +1,26 @@
+import { useRouter } from "next/router";
+import ProfileTemplate from "src/Templates/Profile";
+import DashboardLayout from "src/Layouts/DashboardLayout";
+import SideNav from "src/Templates/Dashboard/SideNav";
+import SearchTemplate from "src/Templates/Search";
 import { Row, Col } from "antd";
-import React from "react";
-import styles from "./index.module.css";
-type layoutProps = {
-	MainPanel: any;
+export default function Profile() {
+	const router = useRouter();
+	const id = router.query.id ? router.query.id : "";
 
-	SidePanel: () => JSX.Element;
-	RightPanel: () => JSX.Element;
-};
-
-export default function DashboardLayout({
-	MainPanel,
-	SidePanel,
-	RightPanel,
-}: layoutProps) {
 	return (
-		<Row className={styles.main}>
+		<Row
+			style={{
+				minHeight: "100vh",
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+				width: "100%",
+				minWidth: "100vw",
+				// backgroundImage: "linear-gradient(to bottom left, #e839f6, #61d8de)",
+				backgroundColor: "#e5e5e5",
+			}}
+		>
 			<Col
 				xs={24}
 				sm={24}
@@ -54,7 +60,7 @@ export default function DashboardLayout({
 							justifyContent: "center",
 						}}
 					>
-						<SidePanel />
+						<SideNav />
 					</Col>
 
 					<Col
@@ -62,10 +68,15 @@ export default function DashboardLayout({
 						sm={11}
 						md={11}
 						lg={11}
-						xl={11}
-						className={styles.mainPanel}
+						xl={11} //className={styles.mainPanel}
+						style={{
+							backgroundColor: "#fff",
+							width: "100%",
+							padding: 5,
+							borderRadius: 13,
+						}}
 					>
-						<MainPanel />
+						<ProfileTemplate id={id ? id : "0"} />
 					</Col>
 					<Col
 						xs={5}
@@ -77,9 +88,10 @@ export default function DashboardLayout({
 							backgroundColor: "#fff",
 							padding: 10,
 							borderRadius: 6,
+							height: "auto",
 						}}
 					>
-						<RightPanel />
+						<SearchTemplate />
 					</Col>
 				</Row>
 			</Col>

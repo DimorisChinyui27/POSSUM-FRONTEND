@@ -15,7 +15,8 @@
    justify-content: center;
     align-items: center;
     width: 100%;
- 
+    background-image: linear-gradient(to bottom left, #e839f6, #61d8de);
+
 }
 .inputClass{
     width: 100%;max-width: 350px;

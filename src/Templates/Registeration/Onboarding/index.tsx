@@ -26,6 +26,7 @@ import styles from "./index.module.css";
 import React from "react";
 //import Image from "next/image";
 import PaymentOptions from "./PaymentOptions";
+import { useRouter } from "next/router";
 const { Step } = Steps;
 const dateFormat = "DD/MM/YYYY";
 const { Option } = Select;
@@ -33,7 +34,11 @@ const { Option } = Select;
 export default function OnboardingTemplate() {
 	const [activeStep, setActiveStep] = React.useState<number>(0);
 	const [language, setLanguage] = React.useState<string>("");
+	const [languageError, setLanguageError] = React.useState(false);
 	const [topicOfInterest, setTopicOfInterest] = React.useState([]);
+	const [date, setDate] = React.useState("");
+	const [dateError, setDateError] = React.useState(false);
+	const router = useRouter();
 	const handleChange = (value: string) => {
 		setLanguage(value);
 	};
@@ -67,12 +72,21 @@ export default function OnboardingTemplate() {
 	];
 	const changeStep = () => {
 		if (activeStep == 1) {
-			alert("Finished Finally");
+			router.push("/dashboard");
 		}
 		setActiveStep(activeStep + 1);
 	};
 	const onChange = (currentSlide: number) => {
 		console.log(currentSlide);
+	};
+	const checkVals = () => {
+		setLanguageError(!language);
+		setDateError(!date);
+		if (!language || !date) {
+			return;
+		} else {
+			changeStep();
+		}
 	};
 	return (
 		<div className={styles.main}>
@@ -135,8 +149,17 @@ export default function OnboardingTemplate() {
 										defaultValue={moment("01/01/2015", dateFormat)}
 										format={dateFormat}
 										className={styles.allInputs}
+										onChange={(e, datestring) => {
+											setDate(datestring);
+											setDateError(false);
+										}}
 										size="large"
 									/>
+									{dateError && (
+										<span style={{ color: "red" }}>
+											Please enter your date of birth
+										</span>
+									)}
 								</Tooltip>
 							</div>
 							<div className={styles.colLeftAlign}>
@@ -154,6 +177,11 @@ export default function OnboardingTemplate() {
 									<Option value="German">German</Option>
 									<Option value="Italian">Italian</Option>
 								</Select>
+								{languageError && (
+									<span style={{ color: "red" }}>
+										Please select your language
+									</span>
+								)}
 							</div>
 							<div className={styles.colLeftAlign}>
 								{" "}
@@ -191,6 +219,7 @@ export default function OnboardingTemplate() {
 						<PaymentOptions
 							activeStep={activeStep}
 							setActiveStep={setActiveStep}
+							changeStep={changeStep}
 						/>
 					</div>
 				)}
@@ -198,7 +227,12 @@ export default function OnboardingTemplate() {
 				{activeStep === 0 && (
 					<Popover content="Let the games begin :)">
 						<div style={{ width: 350, marginTop: 20 }}>
-							<button className={styles.primary} onClick={changeStep}>
+							<button
+								className={styles.primary}
+								onClick={() => {
+									checkVals();
+								}}
+							>
 								Next
 								<TbYoga
 									style={{

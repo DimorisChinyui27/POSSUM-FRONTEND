@@ -2,13 +2,14 @@ import React from "react";
 import Image from "next/image";
 import {
 	Modal,
-	Input,
 	// Switch,
 	AutoComplete,
 	Row,
 	Col,
 	Tooltip,
 	Popover,
+	Switch,
+	message,
 	// Popconfirm,
 	// Space,
 	// Dropdown,
@@ -32,17 +33,25 @@ import {
 } from "react-icons/fa";
 
 import { IoIosPeople } from "react-icons/io";
-import { RiQuestionAnswerLine } from "react-icons/ri";
+import { RiQuestionAnswerLine, RiImageFill } from "react-icons/ri";
 // import { GiReturnArrow } from "react-icons/gi";
 // import { AiOutlineGift } from "react-icons/ai";
 import { IoMdAdd } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
 // import { CgPushChevronUpO } from "react-icons/cg";
+// import { MdOutlineSlowMotionVideo } from 'react-icons/md'
 import { RiCoinsFill } from "react-icons/ri";
 import { AiFillGift } from "react-icons/ai";
 import { activeUser } from "src/Interfaces";
+import moment from "moment";
 import { TbArrowsSort } from "react-icons/tb";
-import { MdOutlineViewHeadline } from "react-icons/md";
+import {
+	MdOutlineViewHeadline,
+	MdOutlineSlowMotionVideo,
+} from "react-icons/md";
+import Video from "src/Components/Video";
+import ImageUpload from "src/Components/ImageUpload";
+import AddGift from "src/Components/AddGift";
 // const { TextArea } = Input;
 const sortModalOptions = [
 	"Default: Votes Descending",
@@ -61,24 +70,37 @@ const DashboardTemplate = () => {
 
 	const [sortBy, setSortBy] = React.useState(0);
 
-	const activeUser: activeUser = {
-		id: "22-346",
-		username: "Allen O'Daniel",
-		url: "/profilePic.jpg",
+	const activeUser: any = {
+		id: "7",
+		userName: "@fashionIconCosta",
+		firstName: "Alex",
+		lastName: "Costa",
+		url: "/costa.jpg",
+		crowns: 765,
+
+		domain: "Fashion Influencer",
+		description:
+			"Men's Fashion | Grooming | Lifestyle Founder @forteseries @apricusskincare @aetosapparel",
+		subDescription: "3.7M YouTube | 1.4M TikTok",
+		totalAnswered: "200",
+		totalAsked: "73",
+		totalCrowns: "267",
+		interestedTopics: ["Lifestyle", "Grooming", "Men's Fashion"],
 	};
 	const [openAnswer, setOpenAnswer] = React.useState<number>(0);
 	const [postsList, setPostList] = React.useState([
 		{
 			questionId: "adsadasd",
-			id: "22-345",
-
-			username: "Axel Blaze",
+			id: "7",
+			firstName: "Axel",
+			lastName: "Blaze",
+			userName: "@AxelBlaze",
 			url: "/profileSmol.jpg",
 			post: "Why has the crptocurrency market crashed so much after all the hype last week?",
 			totalAnswered: 2,
 			sameQuestion: 200,
 			date: "Aug 28",
-			totalVotes: 120,
+			totalVotes: ["0", "1", "2", "3", "4"],
 			bounty: 30,
 			answers: [
 				{
@@ -86,52 +108,79 @@ const DashboardTemplate = () => {
 						username: "Mac Ovens",
 						id: "12-345",
 						url: "/robert-downey-jr.jpeg",
-						profession: "Software Engineer at Google",
+						domain: "Software Engineer at Google",
 					},
 					answerType: "text",
-					answerValue:
-						"It is due to the the investors who sold the crypto and took their cash out which made crypto to depriciate.",
+					answerValue: {
+						text: "It is due to the the investors who sold the crypto and took their cash out which made crypto to depriciate.",
+						image: [],
+						video: [],
+					},
 					answeredDate: "3rd Oct, 2022",
-					answerVotes: 2,
+					answerVotes: ["0", "1"],
+					// gifts: [
+					// 	{
+					// 		gitedBy: "1",
+					// 		giftAmount:23
+					// 	},
+					// ],
 				},
 				{
 					answeredBy: {
 						username: "Ronald Ethan",
 						id: "12-345",
 						url: "/butler.jpg",
-						profession: "Software Engineer at Facebook",
+						domain: "Software Engineer at Facebook",
 					},
 					answerType: "text",
-					answerValue: "Maybe due to Elon :)",
+					answerValue: {
+						text: "Maybe due to Elon :)",
+						image: [],
+						video: [],
+					},
 					answeredDate: "4rth Oct, 2022",
-					answerVotes: 0,
+					answerVotes: ["3", "1"],
 				},
 			],
+			gifts: [
+				{
+					giftedBy: "7",
+					giftAmount: 23,
+				},
+			],
+			closed: false,
 		},
 		{
 			questionId: "adsadasda",
-			id: "22-346",
-			username: "Allen O'Daniel",
+			id: "32",
+			// username: "Allen O'Daniel",
+			firstName: "Allen",
+			lastName: "O'Daniel",
+			userName: "@Allenoure",
 			url: "/profilePic.jpg",
 			post: "Are we living in a simulation?",
 			totalAnswered: 0,
 			sameQuestion: 200,
 			date: "Aug 28",
-			totalVotes: 0,
+			totalVotes: ["0", "1", "4"],
 			bounty: 70,
 			answers: [],
+			gifts: [],
+			closed: false,
 		},
 		{
 			questionId: "adsada3",
-			id: "22-323",
-
-			username: "Arthur",
+			id: "26",
+			firstName: "Arthur",
+			lastName: "Mark",
+			userName: "@ArkMark_12",
+			// username: "Arthur",
 			url: "/entrepreneur.jpg",
 			post: "How Do I get more clients for my business?",
 			totalAnswered: 3,
 			sameQuestion: 200,
 			date: "Aug 28",
-			totalVotes: 120,
+			totalVotes: ["3", "4"],
 			bounty: 600,
 			answers: [
 				{
@@ -139,32 +188,42 @@ const DashboardTemplate = () => {
 						username: "Chris",
 						id: "12-345",
 						url: "/arthur.png",
-						profession: "QA at Systems",
+						domain: "QA at Systems",
 					},
 					answerType: "text",
-					answerValue: "Start advertising on social media platform",
+					answerValue: {
+						text: "Start advertising on social media platform",
+						image: [],
+						video: [],
+					},
 					answeredDate: "3rd Oct, 2022",
-					answerVotes: 5,
+					answerVotes: ["3", "2", "4"],
 				},
 				{
 					answeredBy: {
 						username: "Ruben",
 						id: "12-345",
 						url: "/chris.jpg",
-						profession: "Entrepreneur",
+						domain: "Entrepreneur",
 					},
 					answerType: "text",
-					answerValue:
-						"Invest in Sales team and use social media to reach out to clients",
+					answerValue: {
+						text: "Invest in Sales team and use social media to reach out to clients",
+						image: [],
+						video: [],
+					},
+
 					answeredDate: "4rth Oct, 2022",
-					answerVotes: 0,
+					answerVotes: ["1", "2", "5"],
 				},
 			],
+			gifts: [],
+			closed: false,
 		},
 	]);
-	const showModal = () => {
-		setIsModalOpen(true);
-	};
+	// const showModal = () => {
+	// 	setIsModalOpen(true);
+	// };
 
 	const handleOk = () => {
 		setIsModalOpen(false);
@@ -172,6 +231,23 @@ const DashboardTemplate = () => {
 
 	const handleCancel = () => {
 		setIsModalOpen(false);
+	};
+	const upVoteQuestion = (item: any) => {
+		let temp = [...postsList];
+		let ind = temp.findIndex((itm) => itm.id === item.id);
+		// console.log("active", activeUser.id);
+		if (
+			temp[ind].totalVotes.findIndex(
+				(innerItem) => innerItem == activeUser.id
+			) < 0
+		) {
+			temp[ind].totalVotes.push(activeUser.id);
+		} else {
+			temp[ind].totalVotes = temp[ind].totalVotes.filter(
+				(votes) => votes !== activeUser.id
+			);
+		}
+		setPostList(temp);
 	};
 
 	return (
@@ -235,63 +311,6 @@ const DashboardTemplate = () => {
 							setIsModalOpen(true);
 						}}
 					/>
-					<div
-						style={{
-							display: "flex",
-							flexDirection: "row",
-							alignItems: "center",
-							justifyContent: "space-between",
-							width: "100%",
-							maxWidth: 500,
-							paddingTop: 10,
-						}}
-					>
-						<span
-							style={{
-								display: "flex",
-								flexDirection: "row",
-								alignItems: "center",
-								justifyContent: "space-between",
-								color: "#bababa",
-								fontSize: 15.5,
-								fontWeight: "normal",
-								cursor: "pointer",
-							}}
-							onClick={() => {
-								setActiveTab(0);
-							}}
-							// onClick={() => {
-							// 	setIsModalOpen(true);
-							// }}
-						>
-							<Image src={"/thinking.png"} width={20} height={20} />{" "}
-							<span
-								style={{
-									marginLeft: 7,
-								}}
-							>
-								Ask{" "}
-							</span>
-						</span>
-						|
-						<span
-							style={{
-								display: "flex",
-								flexDirection: "row",
-								alignItems: "center",
-								justifyContent: "space-between",
-								color: "#bababa",
-								fontSize: 15.5,
-								fontWeight: "normal",
-								cursor: "pointer",
-							}}
-							onClick={() => {
-								setActiveTab(1);
-							}}
-						>
-							Answer <EditOutlined style={{ marginLeft: 5, color: "#000" }} />{" "}
-						</span>
-					</div>
 				</div>
 			</div>
 			<QuestionModal
@@ -299,6 +318,18 @@ const DashboardTemplate = () => {
 				handleCancel={handleCancel}
 				handleOk={handleOk}
 			/>
+			<div
+				style={{
+					backgroundColor: "#fff",
+					display: "flex",
+					flexDirection: "row",
+					alignItems: "center",
+					justifyContent: "space-evenly",
+				}}
+			>
+				{/* <span>Closed Questions</span> */}
+			</div>
+
 			{activeTab === 0 ? (
 				<NewsFeed
 					{...{
@@ -311,6 +342,7 @@ const DashboardTemplate = () => {
 						setShowAnswerDropDown,
 						openAnswer,
 						setOpenAnswer,
+						upVoteQuestion,
 					}}
 				/>
 			) : (
@@ -435,6 +467,7 @@ const NewsFeed = ({
 	setShowAnswerDropDown,
 	openAnswer,
 	setOpenAnswer,
+	upVoteQuestion,
 }: {
 	postsList: any[];
 	setPostList: Function;
@@ -445,9 +478,48 @@ const NewsFeed = ({
 	setShowAnswerDropDown: Function;
 	openAnswer: Number;
 	setOpenAnswer: Function;
+	upVoteQuestion: Function;
 }) => {
+	const [gift, setGift] = React.useState(2);
+	const [open, setOpen] = React.useState(false);
+	const [activeIndex, setActiveIndex] = React.useState(-1);
+	// const [messageApi, contextHolder] = message.useMessage();
+
+	const addGiftToQuestion = (call: boolean, completed: string) => {
+		// setOpen(call);
+		if (completed === "completed") {
+			let temp = [...postsList];
+			temp[activeIndex].gifts.push({
+				giftedBy: activeUser.id,
+				giftAmount: gift,
+			});
+			setPostList(temp);
+		}
+		setOpen(call);
+		// alert("activeindex" + activeIndex.toString());
+
+		setGift(2);
+		setActiveIndex(-1);
+	};
+	const countAllBounty = (list: any) => {
+		let bounty = 0;
+		for (let i = 0; i < list.length; i++) {
+			bounty += list[i].giftAmount;
+		}
+		return bounty;
+	};
+	const unsatisfy = (index: number) => {
+		let temp = [...postsList];
+		temp[index].bounty = 0;
+		temp[index].closed = true;
+	};
+	const showError = () => {
+		alert("Amount has been refunded!");
+	};
 	return (
 		<div className={styles.dashboardContent}>
+			<AddGift {...{ gift, setGift, open, addGiftToQuestion }} />
+
 			{postsList.map((item, index) => {
 				return (
 					<div
@@ -455,7 +527,9 @@ const NewsFeed = ({
 							display: "flex",
 							flexDirection: "column",
 							boxShadow:
-								"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
+								index == openAnswer
+									? "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"
+									: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
 
 							paddingLeft: 7,
 							paddingRight: 7,
@@ -464,6 +538,7 @@ const NewsFeed = ({
 							paddingBottom: 10,
 							marginTop: 10,
 							paddingTop: 5,
+							//border: index == openAnswer ? "1px solid #2a2a2a" : 0,
 						}}
 					>
 						<div
@@ -544,24 +619,75 @@ const NewsFeed = ({
 														style={{ borderRadius: "50%" }}
 													/>
 												</div>
-												<span className={styles.postedBy}>{item.username}</span>{" "}
-												• <span className={styles.date}>{item.date}</span>
+												<div
+													style={{
+														flexDirection: "row",
+														display: "flex",
+														alignItems: "flex-start",
+													}}
+												>
+													<div
+														style={{
+															flexDirection: "column",
+															display: "flex",
+															alignItems: "flex-start",
+														}}
+													>
+														<span className={styles.postedBy}>
+															{item.firstName} {item.lastName}
+														</span>
+														<span
+															style={{
+																fontSize: 11,
+																fontWeight: "bold",
+																marginTop: -5,
+															}}
+															className={styles.date}
+														>
+															{item.userName}
+														</span>
+													</div>
+													• <span className={styles.date}>{item.date}</span>
+												</div>
 											</div>
 											<div
-												className={styles.questionUpVote}
+												className={
+													item.totalVotes.findIndex(
+														(ittm: string) => ittm === activeUser.id
+													) > -1
+														? styles.questionUpVoted
+														: styles.questionUpVote
+												}
 												onMouseEnter={() => {
-													let temp = [...postsList];
-													temp[index].totalVotes += 1;
-													setPostList(temp);
+													if (
+														item.totalVotes.findIndex(
+															(ittm: string) => ittm === item.id
+														) > -1
+													) {
+														let temp = [...postsList];
+														temp[index].totalVotes += 1;
+														setPostList(temp);
+													}
 												}}
 												onMouseLeave={() => {
-													let temp = [...postsList];
-													temp[index].totalVotes -= 1;
-													setPostList(temp);
+													if (
+														item.totalVotes.findIndex(
+															(ittm: string) => ittm === item.id
+														) > -1
+													) {
+														let temp = [...postsList];
+														temp[index].totalVotes -= 1;
+														setPostList(temp);
+													}
+												}}
+												onClick={() => {
+													upVoteQuestion(item);
 												}}
 											>
-												<FaCrown />{" "}
-												<span style={{ fontSize: 17 }}>{item.totalVotes}</span>
+												<FaCrown />
+												<span style={{ fontSize: 17 }}>
+													{item.totalVotes.length}
+												</span>
 											</div>
 										</div>
 										<div className={styles.bottomInteractions}>
@@ -602,7 +728,10 @@ const NewsFeed = ({
 															marginLeft: 5,
 														}}
 													>
-														50$
+														{item.bounty +
+															(item.gifts.length > 0
+																? countAllBounty(item.gifts)
+																: 0)}
 													</span>
 												</div>
 											</Popover>
@@ -618,9 +747,16 @@ const NewsFeed = ({
 															display: "flex",
 															alignItems: "center",
 															justifyContent: "center",
-															boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+															boxShadow: item.closed
+																? "none"
+																: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
 															padding: 5,
 															borderRadius: 8,
+															backgroundColor: "#fff",
+															opacity: item.closed ? 0.5 : 1,
+														}}
+														onClick={() => {
+															item.closed ? showError() : unsatisfy(index);
 														}}
 													>
 														<img
@@ -632,7 +768,7 @@ const NewsFeed = ({
 															}}
 														/>
 														<span style={{ color: "#ad71ef", fontSize: 13 }}>
-															Unsatisfied
+															{item.closed ? "Closed" : "Unsatisfied"}
 														</span>
 													</div>
 												</Popover>
@@ -736,7 +872,12 @@ const NewsFeed = ({
 												" " +
 												styles.addGiftToQuestion
 											}
+											onClick={() => {
+												setOpen(true);
+												setActiveIndex(index);
+											}}
 										>
+											{" "}
 											<AiFillGift />
 											<span
 												style={{
@@ -811,7 +952,45 @@ const NewsFeed = ({
 								</div>
 							</div>
 						</div>
-						{item.id !== activeUser.id && <AnswerTheQuestion />}
+						{item.closed ? (
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
+								}}
+							>
+								<input
+									type={"button"}
+									disabled={true}
+									style={{
+										outline: "none",
+										height: 40,
+										maxWidth: 200,
+										borderRadius: 18,
+										width: "100%",
+										border: "1px solid gray",
+										textAlign: "center",
+										cursor: "not-allowed",
+										fontSize: 16.6,
+										fontWeight: "bold",
+										color: "#fff",
+										backgroundColor: "gray",
+										// "linear-gradient(to bottom left, #e839f6, #61d8de)",
+										// opacity: 0.5,
+									}}
+									value="Add an answer"
+								/>
+							</div>
+						) : (
+							<div>
+								{item.id !== activeUser.id && (
+									<AnswerTheQuestion
+										{...{ postsList, setPostList, item, activeUser, index }}
+									/>
+								)}
+							</div>
+						)}
 						{openAnswer === index && (
 							<div style={{ marginTop: 10 }}>
 								{item.answers.map((innerItem: any, innerIdex: any) => {
@@ -864,25 +1043,73 @@ const NewsFeed = ({
 															{innerItem.answeredBy.username}
 														</span>
 														<span className={styles.date}>
-															{innerItem.answeredBy.profession}
-														</span>{" "}
+															{innerItem.answeredBy.domain}
+														</span>
 													</div>
 													<div
-														className={styles.answerUpVote}
-														onMouseEnter={() => {
+														// className={styles.answerUpVote}
+														className={
+															postsList[index].answers[
+																innerIdex
+															].answerVotes.findIndex(
+																(itm: string) => itm === activeUser.id
+															) < 0
+																? styles.answerUpVote
+																: styles.answerUpVoted
+														}
+														// onMouseEnter={() => {
+														// 	let temp = [...postsList];
+														// 	if (
+														// 		temp[index].answers[
+														// 			innerIdex
+														// 		].answerVotes.findIndex(
+														// 			(itm: string) => itm === activeUser.id
+														// 		) < 0
+														// 	) {
+														// 		temp[index].answers[innerIdex].answerVotes.push(
+														// 			activeUser.id
+														// 		);
+														// 		setPostList(temp);
+														// 	}
+														// }}
+														// onMouseLeave={() => {
+														// 	let temp = [...postsList];
+														// 	if (
+														// 		temp[index].answers[
+														// 			innerIdex
+														// 		].answerVotes.findIndex(
+														// 			(itm: string) => itm === activeUser.id
+														// 		) >= 0
+														// 	) {
+														// 		temp[index].answers[innerIdex].answerVotes =
+														// 			temp[index].answers[
+														// 				innerIdex
+														// 			].answerVotes.filter(
+														// 				(ittm: string) => ittm !== activeUser.id
+														// 			);
+														// 		setPostList(temp);
+														// 	}
+														// }}
+														onClick={() => {
 															let temp = [...postsList];
-															temp[index].answers[innerIdex].answerVotes += 1;
-															setPostList(temp);
-														}}
-														onMouseLeave={() => {
-															let temp = [...postsList];
-															temp[index].answers[innerIdex].answerVotes -= 1;
-															setPostList(temp);
+															if (
+																temp[index].answers[
+																	innerIdex
+																].answerVotes.findIndex(
+																	(itm: string) => itm === activeUser.id
+																) < 0
+															) {
+																temp[index].answers[innerIdex].answerVotes.push(
+																	activeUser.id
+																);
+																setPostList(temp);
+																//alert("done");
+															}
 														}}
 													>
-														<FaCrown />{" "}
+														<FaCrown />
 														<span style={{ fontSize: 13 }}>
-															{innerItem.answerVotes}
+															{innerItem.answerVotes.length}
 														</span>
 													</div>
 												</div>
@@ -895,7 +1122,6 @@ const NewsFeed = ({
 													}}
 												>
 													<div>
-														{" "}
 														<Popover
 															content={
 																"Like it? Gift them so they can contribute more."
@@ -968,7 +1194,7 @@ const NewsFeed = ({
 												</div>
 											</div>
 											<div style={{ paddingTop: 10, paddingLeft: 8 }}>
-												{innerItem.answerValue}
+												{innerItem.answerValue.text}
 											</div>
 										</div>
 									);
@@ -1388,7 +1614,11 @@ const UnAnsweredFeed = ({
 								</div>
 							</div>
 						</div>
-						{item.id !== activeUser.id && <AnswerTheQuestion />}
+						{item.id !== activeUser.id && (
+							<AnswerTheQuestion
+								{...{ postsList, setPostList, item, activeUser, index }}
+							/>
+						)}
 						{openAnswer === index && (
 							<div style={{ marginTop: 10 }}>
 								{item.answers.map((innerItem: any, innerIdex: any) => {
@@ -1441,25 +1671,78 @@ const UnAnsweredFeed = ({
 															{innerItem.answeredBy.username}
 														</span>
 														<span className={styles.date}>
-															{innerItem.answeredBy.profession}
+															{innerItem.answeredBy.domain}
 														</span>{" "}
 													</div>
 													<div
 														className={styles.answerUpVote}
 														onMouseEnter={() => {
 															let temp = [...postsList];
-															temp[index].answers[innerIdex].answerVotes += 1;
-															setPostList(temp);
+															if (
+																temp[index].answers[
+																	innerIdex
+																].answerVotes.findIndex(
+																	(itttem: any) => itttem === activeUser.id
+																) < 0
+															) {
+																temp[index].answers[innerIdex].answerVotes =
+																	temp[index].answers[
+																		innerIdex
+																	].answerVotes.push(activeUser.id);
+																setPostList(temp);
+															}
 														}}
 														onMouseLeave={() => {
 															let temp = [...postsList];
-															temp[index].answers[innerIdex].answerVotes -= 1;
-															setPostList(temp);
+															console.log(
+																"before remove",
+																temp[index].answers[innerIdex].answerVotes
+															);
+
+															console.log(
+																"after remove",
+																temp[index].answers[
+																	innerIdex
+																].answerVotes.filter(
+																	(ittm: any) => ittm !== activeUser.id
+																)
+															);
+															// if (
+															// 	temp[index].answers[
+															// 		innerIdex
+															// 	].answerVotes.findIndex(
+															// 		(itttem: any) => itttem === activeUser.id
+															// 	) < 0
+															// ) {
+															// 	temp[index].answers[innerIdex].answerVotes =
+															// 		temp[index].answers[
+															// 			innerIdex
+															// 		].answerVotes.filter(
+															// 			(ittm: any) => ittm !== activeUser.id
+															// 		);
+															// 	setPostList(temp);
+															// }
 														}}
+														// onClick={() => {
+														// 	let temp = [...postsList];
+														// 	if (
+														// 		temp[index].answers[
+														// 			innerIdex
+														// 		].answerVotes.findIndex(
+														// 			(itttem: any) => itttem === activeUser.id
+														// 		) < 0
+														// 	) {
+														// 		temp[index].answers[innerIdex].answerVotes =
+														// 			temp[index].answers[
+														// 				innerIdex
+														// 			].answerVotes.push(activeUser.id);
+														// 		setPostList(temp);
+														// 	}
+														// }}
 													>
 														<FaCrown />{" "}
 														<span style={{ fontSize: 13 }}>
-															{innerItem.answerVotes}
+															{innerItem.answerVotes.length}
 														</span>
 													</div>
 												</div>
@@ -1545,7 +1828,7 @@ const UnAnsweredFeed = ({
 												</div>
 											</div>
 											<div style={{ paddingTop: 10, paddingLeft: 8 }}>
-												{innerItem.answerValue}
+												{innerItem.answerValue.text}
 											</div>
 										</div>
 									);
@@ -1559,7 +1842,60 @@ const UnAnsweredFeed = ({
 	);
 };
 
-const AnswerTheQuestion = () => {
+const AnswerTheQuestion = ({
+	postsList,
+	setPostList,
+	item,
+	activeUser,
+	index,
+}: {
+	postsList: any[];
+	setPostList: Function;
+	item: any;
+	activeUser: any;
+	index: number;
+}) => {
+	const [answerModal, setAnswerModal] = React.useState(false);
+	const [answerText, setAnswerText] = React.useState("");
+	const [answerImage, setAnswerImage] = React.useState([]);
+	const [answerVideo, setAnswerVideo] = React.useState([]);
+	const removeImages = (index: number) => {
+		let temp = [...answerImage];
+		temp = temp.filter((itm, ind) => ind !== index);
+		setAnswerImage(temp);
+	};
+	const removeVideos = (index: number) => {
+		let temp = [...answerVideo];
+		temp = temp.filter((itm, ind) => ind !== index);
+		setAnswerVideo(temp);
+	};
+	const addAnswerToList = () => {
+		let temporary = [...postsList];
+		temporary[index].answers.push({
+			answeredBy: {
+				id: activeUser.id,
+				username: activeUser.userName,
+				url: activeUser.url,
+				domain: activeUser.domain,
+			},
+			answerType:
+				(answerText ? "Text" : "") +
+				"+" +
+				(answerImage.length > 0 ? "Video" : "") +
+				"+" +
+				(answerVideo.length > 0 ? "Video" : ""),
+			answerValue: {
+				text: answerText,
+				video: answerVideo,
+				image: answerImage,
+			},
+
+			answeredDate: moment().format("LL"),
+			answerVotes: [],
+		});
+		setPostList(postsList);
+		setAnswerModal(false);
+	};
 	return (
 		<div
 			style={{
@@ -1572,59 +1908,215 @@ const AnswerTheQuestion = () => {
 				style={{
 					display: "flex",
 					alignItems: "center",
-					justifyContent: "space-between",
-					flexDirection: "row",
-
-					borderRadius: 18,
+					justifyContent: "center",
 
 					marginBottom: 10,
-					height: 40,
-					width: "100%",
-					border: "1px solid gray",
-					paddingLeft: 20,
-					paddingRight: 10,
 				}}
 			>
 				<input
-					type={"text"}
+					type={"button"}
 					style={{
 						outline: "none",
-						border: 0,
+						height: 40,
+						maxWidth: 200,
+						borderRadius: 18,
+						width: "100%",
+						border: "1px solid gray",
+						textAlign: "center",
+						cursor: "pointer",
+						fontSize: 16.6,
+						fontWeight: "bold",
+						color: "#fff",
+						backgroundImage:
+							"linear-gradient(to bottom left, #e839f6, #61d8de)",
 					}}
-					placeholder="Type an answer..."
+					value="Add an answer"
+					onClick={() => {
+						setAnswerModal(true);
+					}}
 				/>
+			</div>
+			<Modal
+				className="modalStyle"
+				title="Add an Answer"
+				open={answerModal}
+				// onOk={handleOk}
+				onCancel={() => {
+					setAnswerModal(false);
+				}}
+				footer={null}
+				destroyOnClose
+				// style={{ backgroundColor: "#e5e5e5" }}
+				// bodyStyle={{ backgroundColor: "#f7f7f7" }}
+			>
 				<div
 					style={{
+						flexDirection: "column",
 						display: "flex",
-						alignItems: "center",
-						justifyContent: "space-between",
-						flexDirection: "row",
+						paddingTop: 5,
+						paddingBottom: 5,
+						paddingLeft: 15,
+						paddingRight: 10,
+						borderRadius: 22,
+						borderTop: ".5px solid #E8E8E8",
+
+						boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
 					}}
 				>
-					<Popover
-						content={"Add file"}
+					<input
+						placeholder="Please type here..."
 						style={{
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "center",
-							paddingTop: 5,
+							color: "#292221",
+							fontSize: 17,
+							height: "auto",
+							width: "100%",
+							//maxWidth: 200,
+							fontWeight: "normal",
+							//	border: ".25 solid #dadada",
+							border: "none",
+							outline: "none",
 						}}
-					>
-						<IoMdAdd size={20} />
-					</Popover>
-					<Popover
-						content={"Add Media"}
-						style={{
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "center",
-							marginLeft: 10,
+						onChange={(e) => {
+							if (answerText.length < 1200) {
+								setAnswerText(e.target.value);
+							}
 						}}
-					>
-						<FaImages size={20} />
-					</Popover>
+					/>
 				</div>
-			</div>
+				<div
+					style={{
+						flexDirection: "row",
+						alignItems: "center",
+						justifyContent: "flex-end",
+						display: "flex",
+					}}
+				>
+					<span>{answerText.length}/1200</span>
+				</div>
+				<div
+					style={{
+						flexDirection: "row",
+						alignItems: "center",
+						justifyContent: "flex-end",
+						display: "flex",
+					}}
+				>
+					<span
+						style={{
+							fontSize: 9,
+							letterSpacing: 1,
+							fontWeight: "bold",
+							color: "#9c9e9d",
+						}}
+					>
+						Upload Media (Max size 25MB)
+					</span>
+					&nbsp;
+					<Video fileList={answerVideo} setFileList={setAnswerVideo} /> &nbsp;
+					<ImageUpload fileList={answerImage} setFileList={setAnswerImage} />
+				</div>
+				<Row>
+					<Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+						<div
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "flex-end",
+								justifyContent: "flex-end",
+							}}
+						>
+							{answerVideo.length > 0
+								? answerVideo.map((item, index) => {
+										return (
+											<div
+												style={{
+													border: "1px solid gray",
+													padding: 5,
+													borderRadius: 6,
+												}}
+											>
+												<MdOutlineSlowMotionVideo />
+												&nbsp;
+												<span>{item.path}</span> &nbsp;
+												<DeleteOutlined
+													onClick={() => {
+														removeVideos(index);
+													}}
+													style={{ color: "red" }}
+												/>
+											</div>
+										);
+								  })
+								: ""}
+						</div>
+					</Col>
+					<Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+						<div
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "flex-end",
+								justifyContent: "flex-end",
+							}}
+						>
+							{answerImage.length > 0
+								? answerImage.map((item, index) => {
+										return (
+											<div
+												style={{
+													border: "1px solid gray",
+													padding: 5,
+													borderRadius: 6,
+												}}
+											>
+												<RiImageFill />
+												&nbsp;
+												<span>{item.path}</span> &nbsp;
+												<DeleteOutlined
+													onClick={() => {
+														removeImages(index);
+													}}
+													style={{ color: "red" }}
+												/>
+											</div>
+										);
+								  })
+								: ""}
+						</div>
+					</Col>
+				</Row>
+				<div
+					style={{
+						paddingTop: 20,
+						alignItems: "center",
+						justifyContent: "center",
+						display: "flex",
+					}}
+				>
+					<input
+						type={"button"}
+						style={{
+							outline: "none",
+							height: 40,
+							maxWidth: 120,
+							borderRadius: 18,
+							width: "100%",
+							border: "1px solid gray",
+							textAlign: "center",
+							cursor: "pointer",
+							fontSize: 16.6,
+							fontWeight: "bold",
+							color: "#fff",
+							backgroundImage:
+								"linear-gradient(to bottom left, #e839f6, #61d8de)",
+						}}
+						value="Submit"
+						onClick={() => {
+							addAnswerToList();
+						}}
+					/>
+				</div>
+			</Modal>
 		</div>
 	);
 };
@@ -1644,7 +2136,7 @@ function QuestionModal({
 	const [isDisabled, setDisabled] = React.useState<boolean>(false);
 	const [isTagsVisible, setIsTagVisible] = React.useState<boolean>(false);
 	const [open, setOpen] = React.useState(false);
-
+	const [specificUser, setSpecificUser] = React.useState(false);
 	return (
 		<Modal
 			className="modalStyle"
@@ -1653,10 +2145,12 @@ function QuestionModal({
 			onOk={handleOk}
 			onCancel={handleCancel}
 			footer={null}
+			// style={{ backgroundColor: "#e5e5e5" }}
+			bodyStyle={{ backgroundColor: "#f7f7f7" }}
 		>
 			<div
 				style={{
-					backgroundColor: "#fff	",
+					// backgroundColor: "#fff",
 					paddingLeft: 20,
 					paddingRight: 20,
 				}}
@@ -1704,6 +2198,118 @@ function QuestionModal({
 						Artist
 					</span>
 				</div>
+				<div style={{ marginTop: 20, marginBottom: 3, paddingLeft: 5 }}>
+					<span
+						style={{
+							fontSize: 17,
+							fontWeight: "bold",
+							color: "#000",
+						}}
+					>
+						Choose how you want to post
+					</span>
+				</div>
+				<div
+					style={{
+						display: "flex",
+						alignItems: "flex-start",
+						justifyContent: "left",
+						//	maxWidth: 200,
+						flexDirection: "row",
+						paddingTop: 5,
+						paddingBottom: 5,
+						paddingLeft: 20,
+					}}
+				>
+					<Tooltip title="Your identity is hidden">
+						<div
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "center",
+								justifyContent: "center",
+								paddingLeft: 10,
+								paddingRight: 10,
+								paddingTop: 4,
+								paddingBottom: 4,
+								border: "1px solid #dadada",
+								borderRadius: 6,
+								backgroundColor: "#fff",
+								boxShadow:
+									postingAs === "anonymous"
+										? "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px"
+										: "none",
+							}}
+							onClick={() => {
+								setPostingAs("anonymous");
+							}}
+						>
+							<Image
+								src={"/spyware.png"}
+								width={35}
+								height={35}
+								style={{ borderRadius: 15 }}
+							/>
+							<span
+								style={{
+									textAlign: "center",
+									fontSize: 11,
+									fontWeight: "bold",
+									color: "#bababa",
+								}}
+							>
+								Anonymous
+							</span>
+						</div>
+					</Tooltip>
+					<div style={{ height: 30, width: 30 }}></div>
+					<Tooltip title="Your public profile is visible">
+						<div
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "center",
+								justifyContent: "center",
+								paddingLeft: 10,
+								paddingRight: 10,
+								paddingTop: 4,
+								paddingBottom: 4,
+								border: "1px solid #dadada",
+								borderRadius: 6,
+
+								backgroundColor: "#fff",
+
+								boxShadow:
+									postingAs === "public"
+										? "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px"
+										: "none",
+							}}
+							onClick={() => {
+								setPostingAs("public");
+							}}
+						>
+							<Image
+								src={"/announcement.png"}
+								width={35}
+								height={35}
+								style={{ borderRadius: 15 }}
+							/>
+							<span
+								style={{
+									textAlign: "center",
+									fontSize: 11,
+									fontWeight: "bold",
+									color: "#bababa",
+									paddingLeft: 10,
+									paddingRight: 10,
+								}}
+							>
+								{" "}
+								Publicly{" "}
+							</span>
+						</div>
+					</Tooltip>
+				</div>
 				<div
 					style={{
 						marginTop: 10,
@@ -1716,7 +2322,20 @@ function QuestionModal({
 						boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
 					}}
 				>
-					{" "}
+					<span
+						style={{
+							color: "#bab6b6",
+							fontSize: 12,
+							fontWeight: "bold",
+							alignItems: "flex-end",
+							justifyContent: "flex-end",
+							display: "flex",
+							wordSpacing: 1,
+							paddingBottom: 10,
+						}}
+					>
+						Target people nearby?&nbsp; <Switch onChange={setIsFocused} />
+					</span>
 					<div
 						style={{
 							flexDirection: "column",
@@ -1916,144 +2535,56 @@ function QuestionModal({
 						</div>
 					</div>
 				)}
-				<div style={{ marginTop: 20, marginBottom: 3, paddingLeft: 5 }}>
-					<span
-						style={{
-							fontSize: 17,
-							fontWeight: "bold",
-							color: "#000",
-						}}
-					>
-						Select Audience
-					</span>
-				</div>
 				<div
 					style={{
-						//	marginTop: 10,
 						borderRadius: 15,
 						padding: 20,
 						// backgroundColor: "#fff",
 						backgroundColor: "#fff",
 						boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
-						// border: 0,
-						// // boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
-						// boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+						marginTop: 15,
 					}}
 				>
-					<AudienceComponent />
-				</div>
-				<div style={{ marginTop: 20, marginBottom: 3, paddingLeft: 5 }}>
 					<span
-						style={{
-							fontSize: 17,
-							fontWeight: "bold",
-							color: "#000",
-						}}
+						style={{ color: "#bab6b6", fontSize: 17, fontWeight: "bolder" }}
 					>
-						Choose how you want to post
+						Want to target a specific user?{" "}
+						<Switch onChange={setSpecificUser} />
 					</span>
 				</div>
-				<div
-					style={{
-						display: "flex",
-						alignItems: "flex-start",
-						justifyContent: "left",
-						//	maxWidth: 200,
-						flexDirection: "row",
-						paddingTop: 5,
-						paddingBottom: 5,
-						paddingLeft: 20,
-					}}
-				>
-					<Tooltip title="Your identity is hidden">
-						<div
+
+				{specificUser && (
+					<div style={{ marginTop: 20, marginBottom: 3, paddingLeft: 5 }}>
+						<span
 							style={{
-								display: "flex",
-								flexDirection: "column",
-								alignItems: "center",
-								justifyContent: "center",
-								paddingLeft: 10,
-								paddingRight: 10,
-								paddingTop: 4,
-								paddingBottom: 4,
-								border: "1px solid #dadada",
-								borderRadius: 6,
-								backgroundColor: "#fff",
-								boxShadow:
-									postingAs === "anonymous"
-										? "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px"
-										: "none",
-							}}
-							onClick={() => {
-								setPostingAs("anonymous");
+								fontSize: 17,
+								fontWeight: "bold",
+								color: "#000",
 							}}
 						>
-							<Image
-								src={"/spyware.png"}
-								width={35}
-								height={35}
-								style={{ borderRadius: 15 }}
-							/>
-							<span
-								style={{
-									textAlign: "center",
-									fontSize: 11,
-									fontWeight: "bold",
-									color: "#bababa",
-								}}
-							>
-								Anonymous
-							</span>
-						</div>
-					</Tooltip>
-					<div style={{ height: 30, width: 30 }}></div>
-					<Tooltip title="Your public profile is visible">
-						<div
-							style={{
-								display: "flex",
-								flexDirection: "column",
-								alignItems: "center",
-								justifyContent: "center",
-								paddingLeft: 10,
-								paddingRight: 10,
-								paddingTop: 4,
-								paddingBottom: 4,
-								border: "1px solid #dadada",
-								borderRadius: 6,
+							Select User
+						</span>
+					</div>
+				)}
 
-								backgroundColor: "#fff",
+				{specificUser && (
+					<div
+						style={{
+							//	marginTop: 10,
+							borderRadius: 15,
+							padding: 20,
+							// backgroundColor: "#fff",
+							backgroundColor: "#fff",
+							boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+							// border: 0,
+							// // boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+							// boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+						}}
+					>
+						<AudienceComponent />
+					</div>
+				)}
 
-								boxShadow:
-									postingAs === "public"
-										? "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px"
-										: "none",
-							}}
-							onClick={() => {
-								setPostingAs("public");
-							}}
-						>
-							<Image
-								src={"/announcement.png"}
-								width={35}
-								height={35}
-								style={{ borderRadius: 15 }}
-							/>
-							<span
-								style={{
-									textAlign: "center",
-									fontSize: 11,
-									fontWeight: "bold",
-									color: "#bababa",
-									paddingLeft: 10,
-									paddingRight: 10,
-								}}
-							>
-								{" "}
-								Publicly{" "}
-							</span>
-						</div>
-					</Tooltip>
-				</div>
 				<div
 					style={{
 						margin: 20,
@@ -2078,28 +2609,22 @@ const AudienceComponent = () => {
 
 	const [dropdownOptions, setDropDownOptions] = React.useState([
 		{
-			value: "Software Engineers",
+			value: "Cristiano Ronaldo",
 		},
 		{
-			value: "Team Leads",
+			value: "Tom Cruise",
 		},
 		{
-			value: "Meme Experts",
+			value: "Black Widow",
 		},
 		{
-			value: "Content Creators",
+			value: "@Fiesta",
 		},
 		{
-			value: "QA",
+			value: "Jack Ryan",
 		},
 		{
-			value: "Engineers",
-		},
-		{
-			value: "Doctors",
-		},
-		{
-			value: "ProGamers",
+			value: "Rein",
 		},
 	]);
 	return (
@@ -2116,7 +2641,7 @@ const AudienceComponent = () => {
 				options={dropdownOptions}
 				allowClear
 				onClear={() => setResult("")}
-				placeholder="Target your audience..."
+				placeholder="Search by their name or username..."
 				filterOption={(inputValue: any, option: any) =>
 					option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
 				}
@@ -2391,7 +2916,7 @@ const AddTip = ({ open, setOpen }: { open: boolean; setOpen: Function }) => {
 							outline: "none",
 						}}
 					/>
-					{focused && <span style={{ color: "#000" }}>Average gift is 5$</span>}
+					{focused && <span style={{ color: "#000" }}></span>}
 					{error && <span style={{ color: "red" }}>Minimum gift is 2$</span>}
 				</div>
 				<button

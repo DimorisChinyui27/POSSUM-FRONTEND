@@ -8,9 +8,11 @@ import { Typo } from "src/Components";
 export default function PaymentOptions({
 	activeStep,
 	setActiveStep,
+	changeStep,
 }: {
 	activeStep: number;
 	setActiveStep: Dispatch<SetStateAction<number>>;
+	changeStep: Function;
 }) {
 	const [activeDiv, setActiveDiv] = React.useState(0);
 	const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -19,8 +21,12 @@ export default function PaymentOptions({
 		setIsModalOpen(true);
 	};
 
-	const handleOk = () => {
+	// const handleOk = () => {
+	// 	setIsModalOpen(false);
+	// };
+	const submitDetails = () => {
 		setIsModalOpen(false);
+		changeStep();
 	};
 
 	const handleCancel = () => {
@@ -46,12 +52,12 @@ export default function PaymentOptions({
 				className="modalStyle"
 				title=""
 				open={isModalOpen}
-				onOk={handleOk}
+				// onOk={handleOk}
 				onCancel={handleCancel}
 				footer={null}
 				style={{ borderRadius: 12 }}
 			>
-				<ModalContent activeDiv={activeDiv} />
+				<ModalContent activeDiv={activeDiv} submitDetails={submitDetails} />
 			</Modal>
 			{activeDiv === 0 && (
 				<div className="animate__animated animate__fadeInRight">
@@ -165,7 +171,7 @@ export default function PaymentOptions({
 					color: "#9f8fe9",
 				}}
 				className={styles.btn}
-				onClick={() => setActiveDiv(activeDiv - 1)}
+				onClick={() => changeStep()}
 			>
 				Skip
 			</button>
@@ -173,7 +179,13 @@ export default function PaymentOptions({
 	);
 }
 
-const ModalContent = ({ activeDiv }: { activeDiv: number }) => {
+const ModalContent = ({
+	activeDiv,
+	submitDetails,
+}: {
+	activeDiv: number;
+	submitDetails: Function;
+}) => {
 	return (
 		<div
 			style={{
@@ -425,7 +437,13 @@ const ModalContent = ({ activeDiv }: { activeDiv: number }) => {
 					</Space>
 				</div>
 			)}
-			<button type="button" onClick={() => {}} className={styles.primary}>
+			<button
+				type="button"
+				onClick={() => {
+					submitDetails();
+				}}
+				className={styles.primary}
+			>
 				Submit
 			</button>
 		</div>

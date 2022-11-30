@@ -2,10 +2,10 @@ import { Button, Typo, Possum } from "../../../Components";
 import { Row, Col, Space, Input, Popover } from "antd";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { User } from "src/Interfaces";
-import { MdAlternateEmail, MdFacebook } from "react-icons/md";
+import { MdFacebook } from "react-icons/md";
 import { AiFillInstagram } from "react-icons/ai";
 import { SiGmail } from "react-icons/si";
-
+import { useRouter } from "next/router";
 import styles from "./index.module.css";
 import { UserOutlined, LockOutlined, UnlockOutlined } from "@ant-design/icons";
 import React from "react";
@@ -34,15 +34,34 @@ const LoginTemplate = () => {
 export default LoginTemplate;
 function LoginFunc() {
 	const [passVisible, setPassVisible] = React.useState<boolean>(false);
+	const router = useRouter();
+	// const {
+	// 	register,
+	// 	handleSubmit,
+	// 	formState: { errors, },
+	// } = useForm<Pick<User, "Email" | "Password">>();
+	// const onSubmit: SubmitHandler<Pick<User, "Email" | "Password">> = (data) => {
+	// 	console.log("data", data);
+	// 	if (data.Email && data.Password) {
+	// 		// router.push("/onboarding");
+	// 	}
+	// };
+	const [email, setEmail] = React.useState("");
+	const [password, setPassword] = React.useState("");
 
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<Pick<User, "Email" | "Password">>();
-	const onSubmit: SubmitHandler<Pick<User, "Email" | "Password">> = (data) =>
-		console.log(data);
+	const [emailError, setEmailError] = React.useState(false);
+	const [passwordError, setPasswordError] = React.useState(false);
+
 	const changePassVisible = () => setPassVisible(!passVisible);
+	const checkValues = () => {
+		setEmailError(!email);
+		setPasswordError(!password);
+		if (!email || !password) {
+			return;
+		} else {
+			router.push("/onboarding");
+		}
+	};
 	return (
 		<Space
 			direction="vertical"
@@ -64,7 +83,13 @@ function LoginFunc() {
 			<Typo.Heading title="Login" classType="active" />
 			<br />
 
-			<form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					checkValues();
+				}}
+				style={{ width: "100%" }}
+			>
 				<Space
 					direction="vertical"
 					style={{ width: "100%", paddingBottom: 40 }}
@@ -73,21 +98,25 @@ function LoginFunc() {
 					<Input
 						placeholder={"Type your username"}
 						prefix={<UserOutlined style={{ marginRight: 5 }} />}
-						{...register("Email", { required: true })}
+						// {...register("Email", { required: true })}
+						type="email"
 						className={styles.inputClass}
 						size="large"
 						style={{ width: "450px" }}
+						onChange={(e) => {
+							setEmail(e.target.value);
+						}}
 					/>
-					{errors.Email && (
+					{!email && emailError && (
 						<span className={styles.mandatory}>
-							email or phone number is required
+							Email or Phone number is required
 						</span>
 					)}
 					<div className={styles.topMargin}></div>
 					<Typo.Label title="Password" direction="left" />
 					<Input
 						placeholder={"Type your Password"}
-						type={passVisible ? "password" : "email"}
+						type={passVisible ? "password" : "text"}
 						prefix={
 							passVisible ? (
 								<LockOutlined
@@ -101,12 +130,15 @@ function LoginFunc() {
 								/>
 							)
 						}
-						{...register("Password", { required: true })}
+						// {...register("Password", { required: true })}
+						onChange={(e) => {
+							setPassword(e.target.value);
+						}}
 						className={styles.inputClass}
 						size="large"
 						style={{ width: "450px" }}
 					/>
-					{errors.Password && (
+					{!password && passwordError && (
 						<span className={styles.mandatory}>
 							Can't let you in without a pass
 						</span>

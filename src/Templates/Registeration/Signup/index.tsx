@@ -96,7 +96,7 @@ function SignupFunc() {
 					/>
 					{errors.Email && (
 						<span className={styles.mandatory}>
-							email or phone number is required
+							Email or Phone number is required
 						</span>
 					)}
 					<div className={styles.topMargin}></div>
@@ -130,7 +130,7 @@ function SignupFunc() {
 						/>
 					</Tooltip>
 					{errors.Password && (
-						<span className={styles.mandatory}>password is required</span>
+						<span className={styles.mandatory}>Password is required</span>
 					)}
 					<div className={styles.topMargin}></div>
 					<Typo.Label title="Confirm Password" direction="left" />
@@ -156,7 +156,9 @@ function SignupFunc() {
 						style={{ width: "450px" }}
 					/>
 					{errors.Password && (
-						<span className={styles.mandatory}>password is required</span>
+						<span className={styles.mandatory}>
+							Confirm Password is required
+						</span>
 					)}
 					{/* <div className={styles.alignRight}>
 						<Link

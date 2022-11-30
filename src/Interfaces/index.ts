@@ -34,7 +34,7 @@ export interface steps{
   //export {}
   export interface activeUser {
     id: string;
-    username: string;
+    userName: string;
     url: string;
     
 }

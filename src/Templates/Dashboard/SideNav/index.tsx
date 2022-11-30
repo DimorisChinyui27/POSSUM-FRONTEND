@@ -9,8 +9,12 @@ import { AiOutlineNotification } from "react-icons/ai";
 import { RiSecurePaymentFill } from "react-icons/ri";
 import { FaUserEdit } from "react-icons/fa";
 import styles from "./index.module.css";
-const Profile = () => {
+import TopicModal from "../TopicsModal";
+const SideNav = () => {
 	const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
+	const [isTopicModalOpen, setIsTopicModalOpen] =
+		React.useState<boolean>(false);
+
 	const handleOk = () => {
 		setIsModalOpen(false);
 	};
@@ -30,12 +34,12 @@ const Profile = () => {
 				alignItems: "center",
 			}}
 		>
-			<div className={styles.navOptDiv}>
+			<div className={styles.navOptDiv + " " + styles.navTextNonActive}>
 				<span className={styles.navTextActive}>Home</span>
 				<Image src={"/logo.png"} width={30} height={30} objectFit="contain" />
 			</div>
 			{/* 
-			<div className={styles.navOptDiv}>
+			<div 				className={styles.navOptDiv + " " + styles.navTextNonActive}>
 				<span className={styles.navTextNonActive}>Explore</span>
 				<MdOutlineTravelExplore size={22} className={styles.navIcon} />
 			</div> */}
@@ -45,23 +49,29 @@ const Profile = () => {
 				handleCancel={handleCancel}
 			/>
 
-			<div className={styles.navOptDiv}>
+			<TopicModal {...{ isTopicModalOpen, setIsTopicModalOpen }} />
+			<div className={styles.navOptDiv + " " + styles.navTextNonActive}>
 				<span className={styles.navTextNonActive}>Notifications</span>
 				<AiOutlineNotification size={22} className={styles.navIcon} />
 			</div>
 
-			<div className={styles.navOptDiv}>
+			<div
+				className={styles.navOptDiv + " " + styles.navTextNonActive}
+				onClick={() => {
+					setIsTopicModalOpen(true);
+				}}
+			>
 				<span className={styles.navTextNonActive}>Add Topic</span>
 				<MdOutlineTopic size={22} className={styles.navIcon} />
 			</div>
 
-			<div className={styles.navOptDiv}>
+			<div className={styles.navOptDiv + " " + styles.navTextNonActive}>
 				<span className={styles.navTextNonActive}>Recent Questions</span>
 				<BsCardList size={22} className={styles.navIcon} />
 			</div>
 
 			<div
-				className={styles.navOptDiv}
+				className={styles.navOptDiv + " " + styles.navTextNonActive}
 				onClick={() => {
 					setIsModalOpen(true);
 				}}
@@ -70,7 +80,7 @@ const Profile = () => {
 				<RiSecurePaymentFill size={22} className={styles.navIcon} />
 			</div>
 
-			<div className={styles.navOptDiv}>
+			<div className={styles.navOptDiv + " " + styles.navTextNonActive}>
 				<span className={styles.navTextNonActive}>Edit Profile</span>
 				<FaUserEdit size={22} className={styles.navIcon} />
 			</div>
@@ -96,4 +106,4 @@ const Profile = () => {
 		</div>
 	);
 };
-export default Profile;
+export default SideNav;

@@ -18,10 +18,10 @@ export default function Layout({ LeftPanel }: layoutProps) {
 				xl={24}
 				style={{
 					width: "100%",
-					//maxWidth: 1000,
 					height: "100%",
 					paddingTop: 20,
 					paddingBottom: 20,
+					// backgroundColor: "red",
 				}}
 			>
 				<LeftPanel />

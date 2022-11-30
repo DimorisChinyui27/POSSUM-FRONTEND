@@ -1,6 +1,13 @@
 import DashboardTemplate from "src/Templates/Dashboard";
 import DashboardLayout from "src/Layouts/DashboardLayout";
-import Profile from "src/Templates/Dashboard/Profile";
+import SideNav from "src/Templates/Dashboard/SideNav";
+import SearchTemplate from "src/Templates/Search";
 export default function Dashboard() {
-	return <DashboardLayout MainPanel={DashboardTemplate} SidePanel={Profile} />;
+	return (
+		<DashboardLayout
+			MainPanel={DashboardTemplate}
+			SidePanel={SideNav}
+			RightPanel={SearchTemplate}
+		/>
+	);
 }
