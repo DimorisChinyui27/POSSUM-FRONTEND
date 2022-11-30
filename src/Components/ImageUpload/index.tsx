@@ -2,13 +2,7 @@ import React from "react";
 import Dropzone from "react-dropzone";
 import { AiOutlinePicture } from "react-icons/ai";
 
-const ImageUpload = ({
-	fileList,
-	setFileList,
-}: {
-	fileList: any[];
-	setFileList: Function;
-}) => {
+const ImageUpload = ({ setFileList }: { setFileList: Function }) => {
 	return (
 		<Dropzone
 			onDrop={(acceptedFiles) => {

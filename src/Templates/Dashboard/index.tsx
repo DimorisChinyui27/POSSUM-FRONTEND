@@ -9,7 +9,7 @@ import {
 	Tooltip,
 	Popover,
 	Switch,
-	message,
+	// message,
 	// Popconfirm,
 	// Space,
 	// Dropdown,
@@ -18,7 +18,7 @@ import {
 } from "antd";
 import {
 	DeleteOutlined,
-	EditOutlined,
+	// EditOutlined,
 	// MailOutlined,
 	PlusOutlined,
 	// SmileOutlined,
@@ -26,9 +26,9 @@ import {
 import styles from "./index.module.css";
 import {
 	FaGift,
-	FaAngleDoubleUp,
-	FaAngleDoubleDown,
-	FaImages,
+	// FaAngleDoubleUp,
+	// FaAngleDoubleDown,
+	// FaImages,
 	FaCrown,
 } from "react-icons/fa";
 
@@ -36,7 +36,7 @@ import { IoIosPeople } from "react-icons/io";
 import { RiQuestionAnswerLine, RiImageFill } from "react-icons/ri";
 // import { GiReturnArrow } from "react-icons/gi";
 // import { AiOutlineGift } from "react-icons/ai";
-import { IoMdAdd } from "react-icons/io";
+// import { IoMdAdd } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
 // import { CgPushChevronUpO } from "react-icons/cg";
 // import { MdOutlineSlowMotionVideo } from 'react-icons/md'
@@ -326,6 +326,9 @@ const DashboardTemplate = () => {
 					alignItems: "center",
 					justifyContent: "space-evenly",
 				}}
+				onClick={() => {
+					setActiveTab(0);
+				}}
 			>
 				{/* <span>Closed Questions</span> */}
 			</div>
@@ -523,6 +526,7 @@ const NewsFeed = ({
 			{postsList.map((item, index) => {
 				return (
 					<div
+						key={index}
 						style={{
 							display: "flex",
 							flexDirection: "column",
@@ -986,7 +990,7 @@ const NewsFeed = ({
 							<div>
 								{item.id !== activeUser.id && (
 									<AnswerTheQuestion
-										{...{ postsList, setPostList, item, activeUser, index }}
+										{...{ postsList, setPostList, activeUser, index }}
 									/>
 								)}
 							</div>
@@ -1231,24 +1235,21 @@ const UnAnsweredFeed = ({
 	setOpenAnswer: Function;
 	sortBy: number;
 }) => {
-	const itemsForMapping =
-		sortBy === 1
-			? postsList.sort(
-					(firstItem, secondItem) =>
-						firstItem.totalVotes - secondItem.totalVotes
-			  )
-			: sortBy === 2
-			? postsList.sort(
-					(firstItem, secondItem) => secondItem.bounty - firstItem.bounty
-			  )
-			: sortBy === 3
-			? postsList.sort(
-					(firstItem, secondItem) => firstItem.bounty - secondItem.bounty
-			  )
-			: postsList.sort(
-					(firstItem, secondItem) =>
-						secondItem.totalVotes - firstItem.totalVotes
-			  );
+	const itemsForMapping = postsList;
+	// sortBy === 1
+	// 	? postsList.sort((firstItem, secondItem) =>firstItem.totalVotes - secondItem.totalVotes  )
+	// 	: sortBy === 2
+	// 	? postsList.sort(
+	// 			(firstItem, secondItem) => secondItem.bounty - firstItem.bounty
+	// 	  )
+	// 	: sortBy === 3
+	// 	? postsList.sort(
+	// 			(firstItem, secondItem) => firstItem.bounty - secondItem.bounty
+	// 	  )
+	// 	: postsList.sort(
+	// 			(firstItem, secondItem) =>
+	// 				secondItem.totalVotes - firstItem.totalVotes
+	// 	  );
 	return (
 		<div className={styles.dashboardContent}>
 			{itemsForMapping.map((item, index) => {
@@ -1616,7 +1617,7 @@ const UnAnsweredFeed = ({
 						</div>
 						{item.id !== activeUser.id && (
 							<AnswerTheQuestion
-								{...{ postsList, setPostList, item, activeUser, index }}
+								{...{ postsList, setPostList, activeUser, index }}
 							/>
 						)}
 						{openAnswer === index && (
@@ -1845,13 +1846,11 @@ const UnAnsweredFeed = ({
 const AnswerTheQuestion = ({
 	postsList,
 	setPostList,
-	item,
 	activeUser,
 	index,
 }: {
 	postsList: any[];
 	setPostList: Function;
-	item: any;
 	activeUser: any;
 	index: number;
 }) => {
@@ -2012,8 +2011,8 @@ const AnswerTheQuestion = ({
 						Upload Media (Max size 25MB)
 					</span>
 					&nbsp;
-					<Video fileList={answerVideo} setFileList={setAnswerVideo} /> &nbsp;
-					<ImageUpload fileList={answerImage} setFileList={setAnswerImage} />
+					<Video setFileList={setAnswerVideo} /> &nbsp;
+					<ImageUpload setFileList={setAnswerImage} />
 				</div>
 				<Row>
 					<Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
@@ -2029,6 +2028,7 @@ const AnswerTheQuestion = ({
 								? answerVideo.map((item: any, index) => {
 										return (
 											<div
+												key={index}
 												style={{
 													border: "1px solid gray",
 													padding: 5,
@@ -2063,6 +2063,7 @@ const AnswerTheQuestion = ({
 								? answerImage.map((item: any, index) => {
 										return (
 											<div
+												key={index}
 												style={{
 													border: "1px solid gray",
 													padding: 5,
@@ -2137,6 +2138,13 @@ function QuestionModal({
 	const [isTagsVisible, setIsTagVisible] = React.useState<boolean>(false);
 	const [open, setOpen] = React.useState(false);
 	const [specificUser, setSpecificUser] = React.useState(false);
+	const addQuestionToList = () => {
+		console.log(questionTitle);
+		console.log(isFocused);
+		setOpen(false);
+		console.log(typeof setDisabled);
+	};
+
 	return (
 		<Modal
 			className="modalStyle"
@@ -2182,7 +2190,6 @@ function QuestionModal({
 						height={75}
 						width={75}
 					/>
-
 					<span
 						style={{
 							fontWeight: "bolder",
@@ -2192,7 +2199,7 @@ function QuestionModal({
 							color: "#000",
 						}}
 					>
-						Allen O'Daniel
+						Allen O&apos;Daniel
 					</span>
 					<span style={{ color: "#dadada", fontWeight: "bold", fontSize: 15 }}>
 						Artist
@@ -2595,6 +2602,9 @@ function QuestionModal({
 				>
 					<button
 						className={isDisabled ? styles.disabledPrimary : styles.primary}
+						onClick={() => {
+							addQuestionToList();
+						}}
 					>
 						Post
 					</button>
@@ -2607,7 +2617,7 @@ export default DashboardTemplate;
 const AudienceComponent = () => {
 	const [result, setResult] = React.useState("");
 
-	const [dropdownOptions, setDropDownOptions] = React.useState([
+	const dropdownOptions = [
 		{
 			value: "Cristiano Ronaldo",
 		},
@@ -2626,7 +2636,7 @@ const AudienceComponent = () => {
 		{
 			value: "Rein",
 		},
-	]);
+	];
 	return (
 		<div>
 			<AutoComplete
@@ -2849,6 +2859,7 @@ const AddTip = ({ open, setOpen }: { open: boolean; setOpen: Function }) => {
 
 		setTimeout(() => {
 			setOpen(false);
+			console.log(tipVal + "--" + confirmLoading);
 			setConfirmLoading(false);
 		}, 2000);
 	};
@@ -2895,7 +2906,9 @@ const AddTip = ({ open, setOpen }: { open: boolean; setOpen: Function }) => {
 									setTipVal(val);
 									setError(false);
 								}
-							} catch (error) {}
+							} catch (error) {
+								console.log("err", error);
+							}
 						}}
 						onFocus={() => {
 							setFocused(true);

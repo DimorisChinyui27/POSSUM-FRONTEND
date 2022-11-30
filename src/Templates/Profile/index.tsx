@@ -280,7 +280,7 @@ const ProfileTemplate = ({ id }: { id: any }) => {
 			],
 		},
 	]);
-	const [answersList, setAnswersList] = React.useState([
+	const answersList = [
 		{
 			questionId: "adsadasd",
 			id: "22-345",
@@ -382,7 +382,7 @@ const ProfileTemplate = ({ id }: { id: any }) => {
 				},
 			],
 		},
-	]);
+	];
 	const activeUser: any = listOfPeople.find((item) => item.id === id);
 	return (
 		<div style={{ width: "100%", maxWidth: "100%" }}>
@@ -423,7 +423,7 @@ const ProfileTemplate = ({ id }: { id: any }) => {
 								fontWeight: "bold",
 							}}
 						>
-							{activeUser.userName ? activeUser.userName : ""}'s Profile
+							{activeUser.userName ? activeUser.userName : ""}&apos;s Profile
 						</span>
 						<span
 							style={{
@@ -777,6 +777,7 @@ const ProfileTemplate = ({ id }: { id: any }) => {
 							.map((item, index) => {
 								return (
 									<div
+										key={index}
 										style={{
 											display: "flex",
 											flexDirection: "column",
@@ -1178,6 +1179,7 @@ const ProfileTemplate = ({ id }: { id: any }) => {
 							.map((item, index) => {
 								return (
 									<div
+										key={index}
 										style={{
 											display: "flex",
 											flexDirection: "column",

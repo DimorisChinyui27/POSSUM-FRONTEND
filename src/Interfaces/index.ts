@@ -1,14 +1,14 @@
-enum Languages{
-    English,
-    French,
-    German,
+// enum Languages{
+//     English,
+//     French,
+//     German,
 
-}
-enum PaymentMethods{
-    BankTransfer,
-    PayPal,
-    Payoneer,
-}
+// }
+// enum PaymentMethods{
+//     BankTransfer,
+//     PayPal,
+//     Payoneer,
+// }
 export interface StepsProps{
     activeStep: number;
     listOfSteps: steps[];
@@ -29,7 +29,7 @@ export interface steps{
   export  interface prefix {
 	IconName: string;
 	className: string;
-};
+}
   
   //export {}
   export interface activeUser {

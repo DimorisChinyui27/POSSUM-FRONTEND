@@ -1,6 +1,6 @@
 import { Steps } from "antd";
 import React from "react";
-import { StepsProps, steps } from "../../Interfaces";
+import { StepsProps } from "../../Interfaces";
 const { Step } = Steps;
 
 export const StepsCust = ({

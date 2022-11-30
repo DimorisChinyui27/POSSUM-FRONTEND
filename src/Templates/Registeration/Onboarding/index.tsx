@@ -4,7 +4,6 @@ import {
 	//Carousel,
 	//Col,
 	//Space,
-	Steps,
 	DatePicker,
 	Tooltip,
 	//Input,
@@ -27,7 +26,6 @@ import React from "react";
 //import Image from "next/image";
 import PaymentOptions from "./PaymentOptions";
 import { useRouter } from "next/router";
-const { Step } = Steps;
 const dateFormat = "DD/MM/YYYY";
 const { Option } = Select;
 
@@ -76,9 +74,7 @@ export default function OnboardingTemplate() {
 		}
 		setActiveStep(activeStep + 1);
 	};
-	const onChange = (currentSlide: number) => {
-		console.log(currentSlide);
-	};
+
 	const checkVals = () => {
 		setLanguageError(!language);
 		setDateError(!date);

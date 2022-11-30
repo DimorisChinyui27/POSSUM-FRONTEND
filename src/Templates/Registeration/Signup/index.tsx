@@ -2,8 +2,8 @@ import { Button, Possum, Typo } from "../../../Components";
 import { Row, Col, Space, Input, Popover, Tooltip } from "antd";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { User } from "src/Interfaces";
-import { MdAlternateEmail, MdFacebook } from "react-icons/md";
-import { AiFillInstagram, AiFillTwitterCircle } from "react-icons/ai";
+import { MdFacebook } from "react-icons/md";
+import { AiFillInstagram } from "react-icons/ai";
 
 import styles from "./index.module.css";
 import { UserOutlined, LockOutlined, UnlockOutlined } from "@ant-design/icons";

@@ -109,9 +109,10 @@ export default function TopicModal({
 						.filter((item) =>
 							item.value.toString().includes(searchQuery.trim())
 						)
-						.map((item: any) => {
+						.map((item: any, index: number) => {
 							return (
 								<Col
+									key={index}
 									xs={10}
 									sm={7}
 									md={7}
@@ -159,7 +160,7 @@ export default function TopicModal({
 									marginRight: 10,
 								}}
 							>
-								Didn't find it? Let's add to the list
+								Didn&apos;t find it? Let&apos;s add to the list
 							</span>
 							<input
 								onClick={() => {

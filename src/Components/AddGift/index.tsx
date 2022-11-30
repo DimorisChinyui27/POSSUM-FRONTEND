@@ -22,8 +22,9 @@ const AddGift = ({
 
 		setTimeout(() => {
 			addGiftToQuestion(false, "completed");
+			console.log(gift);
 			setConfirmLoading(false);
-		}, 2000);
+		}, 1000);
 	};
 
 	const handleCancel = () => {
@@ -68,7 +69,9 @@ const AddGift = ({
 									setGift(val);
 									setError(false);
 								}
-							} catch (error) {}
+							} catch (error) {
+								console.log(error);
+							}
 						}}
 						onFocus={() => {
 							setFocused(true);

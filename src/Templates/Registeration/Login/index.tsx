@@ -1,7 +1,7 @@
 import { Button, Typo, Possum } from "../../../Components";
 import { Row, Col, Space, Input, Popover } from "antd";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { User } from "src/Interfaces";
+// import { useForm, SubmitHandler } from "react-hook-form";
+// import { User } from "src/Interfaces";
 import { MdFacebook } from "react-icons/md";
 import { AiFillInstagram } from "react-icons/ai";
 import { SiGmail } from "react-icons/si";
@@ -140,7 +140,7 @@ function LoginFunc() {
 					/>
 					{!password && passwordError && (
 						<span className={styles.mandatory}>
-							Can't let you in without a pass
+							Can&apos;t let you in without a pass
 						</span>
 					)}
 					<div className={styles.alignRight} style={{ cursor: "pointer" }}>

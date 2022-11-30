@@ -27,6 +27,8 @@ export default function PaymentOptions({
 	const submitDetails = () => {
 		setIsModalOpen(false);
 		changeStep();
+		console.log("activestp", activeStep);
+		console.log(typeof setActiveStep);
 	};
 
 	const handleCancel = () => {

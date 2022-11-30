@@ -50,13 +50,7 @@ import Dropzone from "react-dropzone";
 // import { AiOutlinePicture } from "react-icons/ai";
 import { MdOutlineOndemandVideo } from "react-icons/md";
 
-const Video = ({
-	fileList,
-	setFileList,
-}: {
-	fileList: any[];
-	setFileList: Function;
-}) => {
+const Video = ({ setFileList }: { setFileList: Function }) => {
 	return (
 		<Dropzone
 			onDrop={(acceptedFiles) => {

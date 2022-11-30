@@ -2,7 +2,7 @@
 import Image from "next/image";
 import React from "react";
 //import { Typo } from "src/Components";
-import styles from "./index.module.css";
+// import styles from "./index.module.css";
 
 export default function IntroTemplate() {
 	return (

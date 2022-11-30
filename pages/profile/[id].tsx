@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import ProfileTemplate from "src/Templates/Profile";
-import DashboardLayout from "src/Layouts/DashboardLayout";
 import SideNav from "src/Templates/Dashboard/SideNav";
 import SearchTemplate from "src/Templates/Search";
 import { Row, Col } from "antd";

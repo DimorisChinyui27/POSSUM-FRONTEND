@@ -1,4 +1,3 @@
-import { Popover } from "antd";
 import { FC, MouseEventHandler } from "react";
 import styles from "./index.module.css";
 type buttonType = {
@@ -7,7 +6,8 @@ type buttonType = {
 	title: string;
 	onClick?: MouseEventHandler<HTMLInputElement> | undefined;
 };
-export const Button: FC<buttonType> = ({ type, btnType, title, onClick }) => {
+export const Button: FC<buttonType> = ({ type, btnType, title }) => {
+	console.log("btntyp", btnType);
 	return (
 		<input
 			className={`${styles.primary}`}
