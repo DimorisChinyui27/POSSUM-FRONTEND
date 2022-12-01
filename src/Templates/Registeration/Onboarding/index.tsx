@@ -25,7 +25,7 @@ import styles from "./index.module.css";
 import React from "react";
 //import Image from "next/image";
 // import PaymentOptions from "./PaymentOptions";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 const dateFormat = "DD/MM/YYYY";
 const { Option } = Select;
 
@@ -36,7 +36,7 @@ export default function OnboardingTemplate() {
 	const [topicOfInterest, setTopicOfInterest] = React.useState([]);
 	const [date, setDate] = React.useState("");
 	const [dateError, setDateError] = React.useState(false);
-	const router = useRouter();
+	// const router = useRouter();
 	const handleChange = (value: string) => {
 		setLanguage(value);
 	};
@@ -68,12 +68,12 @@ export default function OnboardingTemplate() {
 		"Youtube",
 		"Beziehungen",
 	];
-	const changeStep = () => {
-		if (activeStep === 1) {
-			router.push("/dashboard");
-		}
-		setActiveStep(1);
-	};
+	// const changeStep = () => {
+	// 	if (activeStep === 1) {
+	// 		router.push("/dashboard");
+	// 	}
+	// 	setActiveStep(1);
+	// };
 
 	const checkVals = () => {
 		setLanguageError(!language);
@@ -81,7 +81,7 @@ export default function OnboardingTemplate() {
 		if (!language || !date) {
 			return;
 		} else {
-			changeStep();
+			setActiveStep(1);
 		}
 	};
 	return (
