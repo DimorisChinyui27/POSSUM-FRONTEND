@@ -287,7 +287,7 @@ export default function SearchTemplate() {
 				)
 				.map((item, index) => {
 					return (
-						<Link href={"/profile/" + item.id}>
+						<Link href={"/profile/" + item.id} key={index}>
 							<div
 								style={{
 									alignItems: "center",
@@ -299,7 +299,6 @@ export default function SearchTemplate() {
 									paddingBottom: 5,
 									cursor: "pointer",
 								}}
-								key={index}
 							>
 								<div
 									style={{

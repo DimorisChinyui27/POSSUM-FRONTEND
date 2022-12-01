@@ -1,7 +1,7 @@
 import { Button, Possum, Typo } from "../../../Components";
 import { Row, Col, Space, Input, Popover, Tooltip } from "antd";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { User } from "src/Interfaces";
+// import { useForm, SubmitHandler } from "react-hook-form";
+// import { User } from "src/Interfaces";
 import { MdFacebook } from "react-icons/md";
 import { AiFillInstagram } from "react-icons/ai";
 
@@ -10,6 +10,7 @@ import { UserOutlined, LockOutlined, UnlockOutlined } from "@ant-design/icons";
 import React from "react";
 import Link from "next/link";
 import { SiGmail } from "react-icons/si";
+import { useRouter } from "next/router";
 //import Image from "next/image";
 // import IntroTemplate from "../Intro";
 // import { LoginInput } from "src/Blends/LoginInput";
@@ -42,20 +43,37 @@ const SignupTemplate = () => {
 };
 export default SignupTemplate;
 function SignupFunc() {
+	const router = useRouter();
+	const [email, setEmail] = React.useState("");
+	const [password, setPassword] = React.useState("");
+	const [confirmPassword, setConfirmPassword] = React.useState("");
+	const [emailError, setEmailError] = React.useState(false);
+	const [passwordError, setPasswordError] = React.useState(false);
+	const [confirmPasswordError, setConfirmPasswordError] = React.useState(false);
 	const [passVisible, setPassVisible] = React.useState<boolean>(false);
 	const [confirmPassVisible, setConfirmPassVisible] =
 		React.useState<boolean>(false);
 
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<Pick<User, "Email" | "Password"> & { ConfirmPassword: string }>();
-	const onSubmit: SubmitHandler<
-		Pick<User, "Email" | "Password"> & { ConfirmPassword: string }
-	> = (data) => console.log(data);
+	// const {
+	// 	register,
+	// 	handleSubmit,
+	// 	formState: { errors },
+	// } = useForm<Pick<User, "Email" | "Password"> & { ConfirmPassword: string }>();
+	// const onSubmit: SubmitHandler<
+	// 	Pick<User, "Email" | "Password"> & { ConfirmPassword: string }
+	// > = (data) => console.log(data);
 	const changePassVisible = () => setPassVisible(!passVisible);
 	const changeConfirmPass = () => setConfirmPassVisible(!confirmPassVisible);
+	const handleSubmit = () => {
+		setPasswordError(!password);
+		setConfirmPasswordError(!confirmPassword);
+		setEmailError(!email);
+		if (!email || !password || !confirmPassword) {
+			return;
+		} else {
+			router.push("/login");
+		}
+	};
 
 	return (
 		<Space
@@ -80,7 +98,13 @@ function SignupFunc() {
 			<Typo.Heading title="Register" classType="active" />
 			<br />
 
-			<form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					handleSubmit();
+				}}
+				style={{ width: "100%" }}
+			>
 				<Space
 					direction="vertical"
 					style={{ width: "100%", paddingBottom: 100 }}
@@ -89,12 +113,15 @@ function SignupFunc() {
 					<Input
 						placeholder={"Type your email"}
 						prefix={<UserOutlined style={{ marginRight: 5 }} />}
-						{...register("Email", { required: true })}
+						// {...register("Email", { required: true })}
+						onChange={(e) => {
+							setEmail(e.target.value);
+						}}
 						className={styles.inputClass}
 						size="large"
 						style={{ width: "450px" }}
 					/>
-					{errors.Email && (
+					{emailError && (
 						<span className={styles.mandatory}>
 							Email or Phone number is required
 						</span>
@@ -109,7 +136,7 @@ function SignupFunc() {
 					>
 						<Input
 							placeholder={"Type your Password"}
-							type={passVisible ? "password" : "email"}
+							type={passVisible ? "password" : "text"}
 							prefix={
 								passVisible ? (
 									<LockOutlined
@@ -123,20 +150,22 @@ function SignupFunc() {
 									/>
 								)
 							}
-							{...register("Password", { required: true })}
+							onChange={(e) => {
+								setPassword(e.target.value);
+							}}
 							className={styles.inputClass}
 							size="large"
 							style={{ width: "450px" }}
 						/>
 					</Tooltip>
-					{errors.Password && (
+					{passwordError && (
 						<span className={styles.mandatory}>Password is required</span>
 					)}
 					<div className={styles.topMargin}></div>
 					<Typo.Label title="Confirm Password" direction="left" />
 					<Input
 						placeholder={"Re-type your Password"}
-						type={confirmPassVisible ? "password" : "email"}
+						type={confirmPassVisible ? "password" : "text"}
 						prefix={
 							confirmPassVisible ? (
 								<LockOutlined
@@ -150,12 +179,15 @@ function SignupFunc() {
 								/>
 							)
 						}
-						{...register("ConfirmPassword", { required: true })}
+						// {...register("ConfirmPassword", { required: true })}
+						onChange={(e) => {
+							setConfirmPassword(e.target.value);
+						}}
 						className={styles.inputClass}
 						size="large"
 						style={{ width: "450px" }}
 					/>
-					{errors.Password && (
+					{confirmPasswordError && (
 						<span className={styles.mandatory}>
 							Confirm Password is required
 						</span>

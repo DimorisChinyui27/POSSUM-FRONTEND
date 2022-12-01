@@ -8,7 +8,11 @@ import {
 	Col,
 	Tooltip,
 	Popover,
-	Switch,
+	// Switch,
+	// Checkbox,
+	Radio,
+	Spin,
+	Space,
 	// message,
 	// Popconfirm,
 	// Space,
@@ -92,10 +96,10 @@ const DashboardTemplate = () => {
 		{
 			questionId: "adsadasd",
 			id: "7",
-			firstName: "Axel",
-			lastName: "Blaze",
-			userName: "@AxelBlaze",
-			url: "/profileSmol.jpg",
+			userName: "@fashionIconCosta",
+			firstName: "Alex",
+			lastName: "Costa",
+			url: "/costa.jpg",
 			post: "Why has the crptocurrency market crashed so much after all the hype last week?",
 			totalAnswered: 2,
 			sameQuestion: 200,
@@ -118,6 +122,7 @@ const DashboardTemplate = () => {
 					},
 					answeredDate: "3rd Oct, 2022",
 					answerVotes: ["0", "1"],
+					gifts: [],
 					// gifts: [
 					// 	{
 					// 		gitedBy: "1",
@@ -140,15 +145,12 @@ const DashboardTemplate = () => {
 					},
 					answeredDate: "4rth Oct, 2022",
 					answerVotes: ["3", "1"],
+					gifts: [],
 				},
 			],
-			gifts: [
-				{
-					giftedBy: "7",
-					giftAmount: 23,
-				},
-			],
+			gifts: [],
 			closed: false,
+			targetAudience: "Software Engineers",
 		},
 		{
 			questionId: "adsadasda",
@@ -165,8 +167,14 @@ const DashboardTemplate = () => {
 			totalVotes: ["0", "1", "4"],
 			bounty: 70,
 			answers: [],
-			gifts: [],
+			gifts: [
+				{
+					giftedBy: "7",
+					giftAmount: 23,
+				},
+			],
 			closed: false,
+			targetAudience: "Software Engineers",
 		},
 		{
 			questionId: "adsada3",
@@ -198,6 +206,7 @@ const DashboardTemplate = () => {
 					},
 					answeredDate: "3rd Oct, 2022",
 					answerVotes: ["3", "2", "4"],
+					gifts: [],
 				},
 				{
 					answeredBy: {
@@ -215,15 +224,14 @@ const DashboardTemplate = () => {
 
 					answeredDate: "4rth Oct, 2022",
 					answerVotes: ["1", "2", "5"],
+					gifts: [],
 				},
 			],
 			gifts: [],
 			closed: false,
+			targetAudience: "Social Media Engineers",
 		},
 	]);
-	// const showModal = () => {
-	// 	setIsModalOpen(true);
-	// };
 
 	const handleOk = () => {
 		setIsModalOpen(false);
@@ -234,8 +242,7 @@ const DashboardTemplate = () => {
 	};
 	const upVoteQuestion = (item: any) => {
 		let temp = [...postsList];
-		let ind = temp.findIndex((itm) => itm.id === item.id);
-		// console.log("active", activeUser.id);
+		let ind = temp.findIndex((itm) => itm.questionId === item.questionId);
 		if (
 			temp[ind].totalVotes.findIndex(
 				(innerItem) => innerItem == activeUser.id
@@ -249,7 +256,40 @@ const DashboardTemplate = () => {
 		}
 		setPostList(temp);
 	};
+	const countAllBounty = (list: any) => {
+		let bounty = 0;
+		for (let i = 0; i < list.length; i++) {
+			bounty += list[i].giftAmount;
+		}
+		return bounty;
+	};
 
+	const unsatisfy = (index: number) => {
+		let temp = [...postsList];
+		if (temp[index].id === activeUser.id && temp[index].bounty !== 0) {
+			temp[index].bounty = 0;
+		} else {
+			let ind = temp[index].gifts.findIndex(
+				(innerItem) => innerItem.giftedBy === activeUser.id
+			);
+			temp[index].gifts[ind].giftAmount = 0;
+		}
+		temp[index].closed =
+			temp[index].bounty + countAllBounty(temp[index].gifts) === 0;
+
+		setPostList(temp);
+	};
+	const addGiftToAnswer = (item: any, answrIndex: any, amount: any) => {
+		let temp = [...postsList];
+		let qIndex = item;
+		let arr: any[] = temp[qIndex].answers[answrIndex].gifts;
+
+		arr.push({
+			giftedBy: activeUser.id,
+			giftAmount: amount,
+		});
+		setPostList(temp);
+	};
 	return (
 		<div style={{ paddingTop: 5 }}>
 			<div
@@ -315,8 +355,12 @@ const DashboardTemplate = () => {
 			</div>
 			<QuestionModal
 				isModalOpen={isModalOpen}
+				setIsModalOpen={setIsModalOpen}
 				handleCancel={handleCancel}
 				handleOk={handleOk}
+				setPostList={setPostList}
+				postsList={postsList}
+				activeUser={activeUser}
 			/>
 			<div
 				style={{
@@ -325,12 +369,64 @@ const DashboardTemplate = () => {
 					flexDirection: "row",
 					alignItems: "center",
 					justifyContent: "space-evenly",
-				}}
-				onClick={() => {
-					setActiveTab(0);
+					border: "1px solid #d7dade",
+					marginTop: 5,
+					// padding: 10,
+					borderRadius: 24,
 				}}
 			>
-				{/* <span>Closed Questions</span> */}
+				<span
+					style={{
+						color: activeTab === 0 ? "#fff" : "#9c9e9d",
+						fontSize: 18,
+						fontWeight: activeTab === 0 ? "bold" : "normal",
+						boxShadow:
+							activeTab === 0
+								? "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px"
+								: "none",
+						// padding: 10,
+						width: "100%",
+						borderTopLeftRadius: 25,
+						borderBottomLeftRadius: 24,
+						// paddingLeft: 20,
+						textAlign: "center",
+						cursor: "pointer",
+						paddingTop: 10,
+						paddingBottom: 10,
+						backgroundColor: activeTab === 0 ? "#66d1de" : "#fff",
+					}}
+					onClick={() => {
+						setActiveTab(0);
+					}}
+				>
+					UnAnswered
+				</span>
+				<span
+					style={{
+						color: activeTab === 1 ? "#fff" : "#9c9e9d",
+						fontSize: 18,
+						fontWeight: activeTab === 1 ? "bold" : "normal",
+						boxShadow:
+							activeTab === 1
+								? "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px"
+								: "none",
+						// padding: 10,
+						width: "100%",
+						borderTopRightRadius: 25,
+						borderBottomRightRadius: 24,
+						// paddingLeft: 20,
+						textAlign: "center",
+						paddingTop: 10,
+						cursor: "pointer",
+						paddingBottom: 10,
+						backgroundColor: activeTab === 1 ? "#ad71ef" : "#fff",
+					}}
+					onClick={() => {
+						setActiveTab(1);
+					}}
+				>
+					Answered
+				</span>
 			</div>
 
 			{activeTab === 0 ? (
@@ -346,6 +442,8 @@ const DashboardTemplate = () => {
 						openAnswer,
 						setOpenAnswer,
 						upVoteQuestion,
+						unsatisfy,
+						addGiftToAnswer,
 					}}
 				/>
 			) : (
@@ -358,7 +456,7 @@ const DashboardTemplate = () => {
 								"rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
 							padding: 7,
 							marginTop: 10,
-							display: "flex",
+							display: "none",
 							alignItems: "center",
 							justifyContent: "space-between",
 						}}
@@ -452,7 +550,8 @@ const DashboardTemplate = () => {
 							setShowAnswerDropDown,
 							openAnswer,
 							setOpenAnswer,
-							sortBy,
+							upVoteQuestion,
+							unsatisfy,
 						}}
 					/>
 				</div>
@@ -471,6 +570,8 @@ const NewsFeed = ({
 	openAnswer,
 	setOpenAnswer,
 	upVoteQuestion,
+	unsatisfy,
+	addGiftToAnswer,
 }: {
 	postsList: any[];
 	setPostList: Function;
@@ -482,11 +583,14 @@ const NewsFeed = ({
 	openAnswer: Number;
 	setOpenAnswer: Function;
 	upVoteQuestion: Function;
+	unsatisfy: Function;
+	addGiftToAnswer: Function;
 }) => {
 	const [gift, setGift] = React.useState(2);
 	const [open, setOpen] = React.useState(false);
+	const [openAnswerGift, setOpenAnswerGift] = React.useState(false);
 	const [activeIndex, setActiveIndex] = React.useState(-1);
-	// const [messageApi, contextHolder] = message.useMessage();
+	const [activeAnswerIndex, setActiveAnswerIndex] = React.useState(-1);
 
 	const addGiftToQuestion = (call: boolean, completed: string) => {
 		// setOpen(call);
@@ -504,6 +608,19 @@ const NewsFeed = ({
 		setGift(2);
 		setActiveIndex(-1);
 	};
+	const addGiftToAnswerChild = (call: boolean, completed: string) => {
+		// setOpen(call);
+		if (completed === "completed") {
+			addGiftToAnswer(activeIndex, activeAnswerIndex, gift);
+			//setPostList(temp);
+		}
+		setOpenAnswerGift(call);
+		// alert("activeindex" + activeIndex.toString());
+
+		setGift(2);
+		setActiveIndex(-1);
+		setActiveAnswerIndex(-1);
+	};
 	const countAllBounty = (list: any) => {
 		let bounty = 0;
 		for (let i = 0; i < list.length; i++) {
@@ -511,17 +628,33 @@ const NewsFeed = ({
 		}
 		return bounty;
 	};
-	const unsatisfy = (index: number) => {
-		let temp = [...postsList];
-		temp[index].bounty = 0;
-		temp[index].closed = true;
-	};
-	const showError = () => {
-		alert("Amount has been refunded!");
+
+	// const showError = () => {};
+	const CheckForGiftOrSatisfied = (item: any) => {
+		let flag = false;
+		if (item.id === activeUser.id && item.bounty !== 0) {
+			flag = true;
+		} else {
+			if (item.gifts.length > 0) {
+				let ind = item.gifts.findIndex(
+					(ittm: any) => ittm.giftedBy === activeUser.id
+				);
+				if (ind >= 0) {
+					flag = item.gifts[ind].giftAmount !== 0;
+				}
+			}
+		}
+		return flag;
 	};
 	return (
 		<div className={styles.dashboardContent}>
 			<AddGift {...{ gift, setGift, open, addGiftToQuestion }} />
+			<AddGift
+				gift={gift}
+				setGift={setGift}
+				open={openAnswerGift}
+				addGiftToQuestion={addGiftToAnswerChild}
+			/>
 
 			{postsList.map((item, index) => {
 				return (
@@ -531,8 +664,8 @@ const NewsFeed = ({
 							display: "flex",
 							flexDirection: "column",
 							boxShadow:
-								index == openAnswer
-									? "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"
+								index === openAnswer
+									? "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px"
 									: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
 
 							paddingLeft: 7,
@@ -542,7 +675,7 @@ const NewsFeed = ({
 							paddingBottom: 10,
 							marginTop: 10,
 							paddingTop: 5,
-							//border: index == openAnswer ? "1px solid #2a2a2a" : 0,
+							border: index === openAnswer ? "1px solid #66d1de" : 0,
 						}}
 					>
 						<div
@@ -551,41 +684,22 @@ const NewsFeed = ({
 								flexDirection: "row",
 								alignItems: "flex-start",
 								justifyContent: "flex-start",
-								//	border: "2px solid red",
-
 								paddingBottom: 10,
 								paddingTop: 5,
 							}}
 							key={index}
 						>
-							{/* <div
+							<div
 								style={{
 									display: "flex",
 									flexDirection: "column",
-									alignItems: "center",
-									justifyContent: "space-between",
-									paddingTop: 20,
-									paddingRight: 5,
-								}}
-							>
-								<div className={styles.votesDiv}>
-									<FaAngleDoubleUp className={styles.upVote} />
-									<span className={styles.votes}>{item.totalVotes}</span>
-									<FaAngleDoubleDown className={styles.downVote} />
-								</div>
-							</div> */}
-							<div //className={styles.post}
-								style={{
-									display: "flex",
-									flexDirection: "column",
-									//alignItems: "flex-start",
 									justifyContent: "space-between",
 									width: "100%",
 									height: "100%",
 									minHeight: 150,
 								}}
 							>
-								<div //className={styles.post}
+								<div
 									style={{
 										display: "flex",
 										flexDirection: "column",
@@ -668,9 +782,9 @@ const NewsFeed = ({
 															(ittm: string) => ittm === item.id
 														) > -1
 													) {
-														let temp = [...postsList];
-														temp[index].totalVotes += 1;
-														setPostList(temp);
+														// let temp = [...postsList];
+														// temp[index].totalVotes.push(activeUser.id);
+														// setPostList(temp);
 													}
 												}}
 												onMouseLeave={() => {
@@ -679,9 +793,14 @@ const NewsFeed = ({
 															(ittm: string) => ittm === item.id
 														) > -1
 													) {
-														let temp = [...postsList];
-														temp[index].totalVotes -= 1;
-														setPostList(temp);
+														// let temp = [...postsList];
+														// // temp[index].totalVotes -= 1;
+														// temp[index].totalVotes = temp[
+														// 	index
+														// ].totalVotes.filter(
+														// 	(vv: any) => vv !== activeUser.id
+														// );
+														// setPostList(temp);
 													}
 												}}
 												onClick={() => {
@@ -695,11 +814,17 @@ const NewsFeed = ({
 											</div>
 										</div>
 										<div className={styles.bottomInteractions}>
-											{/* <GiBanknote className={styles.bountyLogo} />
-										<span className={styles.bountyAmount}>{item.bounty}</span> */}
-
 											<Popover
-												content={"You get 50$ if your answer is choosen"}
+												content={
+													"You get " +
+													parseInt(
+														item.bounty +
+															(item.gifts.length > 0
+																? countAllBounty(item.gifts)
+																: 0)
+													) +
+													" if your answer is choosen"
+												}
 												title=""
 											>
 												<div
@@ -716,11 +841,6 @@ const NewsFeed = ({
 													<img
 														src="/OIP.png"
 														style={{
-															//	width: 22,
-
-															//		borderRadius: "50%",
-															//border: "1px solid #66d1de",
-
 															height: 22,
 														}}
 													/>
@@ -740,44 +860,7 @@ const NewsFeed = ({
 												</div>
 											</Popover>
 
-											{activeUser.id === item.id && (
-												<Popover
-													content={"Tap to get a refund"}
-													title="Not satisfied with any answer?"
-												>
-													<div
-														style={{
-															marginRight: 10,
-															display: "flex",
-															alignItems: "center",
-															justifyContent: "center",
-															boxShadow: item.closed
-																? "none"
-																: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
-															padding: 5,
-															borderRadius: 8,
-															backgroundColor: "#fff",
-															opacity: item.closed ? 0.5 : 1,
-														}}
-														onClick={() => {
-															item.closed ? showError() : unsatisfy(index);
-														}}
-													>
-														<img
-															src="/gift-box.png"
-															alt="return"
-															style={{
-																height: 22,
-																objectFit: "contain",
-															}}
-														/>
-														<span style={{ color: "#ad71ef", fontSize: 13 }}>
-															{item.closed ? "Closed" : "Unsatisfied"}
-														</span>
-													</div>
-												</Popover>
-											)}
-											<Popover content={"Software Engineers"} title="">
+											<Popover content={item.targetAudience} title="">
 												<IoIosPeople
 													style={{
 														color: "#0248a3",
@@ -790,34 +873,7 @@ const NewsFeed = ({
 													}}
 												/>
 											</Popover>
-											{/* <Popover
-												content={"You get 50$ if your answer is choosen"}
-												title=""
-											>
-												<div
-													style={{
-														width: 24,
-														height: 24,
-														marginRight: 10,
-														borderRadius: "50%",
-														border: "2px solid #66d1de",
-														display: "flex",
-														alignItems: "center",
-														justifyContent: "center",
-														boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
-													}}
-												>
-													<span
-														style={{
-															fontSize: 9,
-															fontWeight: "bold",
-															color: "#de41f5",
-														}}
-													>
-														50$
-													</span>
-												</div>
-											</Popover> */}
+
 											<div
 												style={{
 													display: "flex",
@@ -866,61 +922,72 @@ const NewsFeed = ({
 									<div className={styles.postQuestion}>{item.post}</div>
 								</div>
 								<div className={styles.postFooter}>
-									<Popover
-										content={"It can be as low as 2$"}
-										title="Contribute to get it answered quickly"
-									>
-										<div
-											className={
-												styles.bottomInteractions +
-												" " +
-												styles.addGiftToQuestion
-											}
-											onClick={() => {
-												setOpen(true);
-												setActiveIndex(index);
-											}}
+									{CheckForGiftOrSatisfied(item) ? (
+										<Popover
+											content={"Tap to get a refund"}
+											title="Not satisfied with any answer?"
 										>
-											{" "}
-											<AiFillGift />
-											<span
+											<div
 												style={{
-													fontSize: 11,
-													paddingLeft: 5,
+													marginRight: 10,
+													display: "flex",
+													alignItems: "center",
+													justifyContent: "center",
+													boxShadow: item.closed
+														? "none"
+														: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+													padding: 5,
+													borderRadius: 8,
+													backgroundColor: "#fff",
+													opacity: item.closed ? 0.5 : 1,
+													cursor: "pointer",
+												}}
+												onClick={() => {
+													item.closed ? showError() : unsatisfy(index);
 												}}
 											>
-												Add Gift
-											</span>
-										</div>
-									</Popover>
-									{/* <Popover
-										content={
-											"The amount of money you get after a successful answer"
-										}
-										title=""
-									>
-										{" "}
-										<div className={styles.bottomInteractions}>
-											<AiOutlineGift
-												style={{
-													marginRight: 7,
-													color: "#585858",
-													fontSize: 17,
-													fontWeight: "bold",
-												}}
-											/>
-											<span
-												style={{
-													fontSize: 12,
-													fontWeight: "bold",
-													color: "#585858",
+												<img
+													src="/gift-box.png"
+													alt="return"
+													style={{
+														height: 22,
+														objectFit: "contain",
+													}}
+												/>
+												<span style={{ color: "#ad71ef", fontSize: 13 }}>
+													Unsatisfied
+												</span>
+											</div>
+										</Popover>
+									) : (
+										<Popover
+											content={"It can be as low as 2$"}
+											title="Contribute to get it answered quickly"
+										>
+											<div
+												className={
+													styles.bottomInteractions +
+													" " +
+													styles.addGiftToQuestion
+												}
+												onClick={() => {
+													setOpen(true);
+													setActiveIndex(index);
 												}}
 											>
-												{" "}
-												50$
-											</span>
-										</div>
-									</Popover> */}
+												<AiFillGift />
+												<span
+													style={{
+														fontSize: 11,
+														paddingLeft: 5,
+													}}
+												>
+													Add Gift
+												</span>
+											</div>
+										</Popover>
+									)}
+
 									<Popover content={"Tap to view answers"} title="">
 										<div
 											className={
@@ -956,45 +1023,13 @@ const NewsFeed = ({
 								</div>
 							</div>
 						</div>
-						{item.closed ? (
-							<div
-								style={{
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
-								}}
-							>
-								<input
-									type={"button"}
-									disabled={true}
-									style={{
-										outline: "none",
-										height: 40,
-										maxWidth: 200,
-										borderRadius: 18,
-										width: "100%",
-										border: "1px solid gray",
-										textAlign: "center",
-										cursor: "not-allowed",
-										fontSize: 16.6,
-										fontWeight: "bold",
-										color: "#fff",
-										backgroundColor: "gray",
-										// "linear-gradient(to bottom left, #e839f6, #61d8de)",
-										// opacity: 0.5,
-									}}
-									value="Add an answer"
+						<div>
+							{item.id !== activeUser.id && (
+								<AnswerTheQuestion
+									{...{ postsList, setPostList, activeUser, index }}
 								/>
-							</div>
-						) : (
-							<div>
-								{item.id !== activeUser.id && (
-									<AnswerTheQuestion
-										{...{ postsList, setPostList, activeUser, index }}
-									/>
-								)}
-							</div>
-						)}
+							)}
+						</div>
 						{openAnswer === index && (
 							<div style={{ marginTop: 10 }}>
 								{item.answers.map((innerItem: any, innerIdex: any) => {
@@ -1132,18 +1167,38 @@ const NewsFeed = ({
 															}
 															title=""
 														>
-															<div className={styles.addGiftToAnswer}>
-																<span //className={styles.answerGiftText}
+															<div
+																className={
+																	innerItem.gifts.length < 0
+																		? styles.addGiftToAnswer
+																		: innerItem.gifts.findIndex(
+																				(answerGift: any) =>
+																					answerGift.giftedBy === activeUser.id
+																		  ) >= 0
+																		? styles.giftedAnswer
+																		: styles.addGiftToAnswer
+																}
+																onClick={() => {
+																	setActiveAnswerIndex(innerIdex);
+																	setActiveIndex(index);
+																	setOpenAnswerGift(true);
+																}}
+															>
+																<span
 																	style={{
 																		fontSize: 15,
 																		paddingRight: 5,
 																		paddingTop: 5,
 																	}}
 																>
-																	Gift
+																	{innerItem.gifts.length > 0
+																		? innerItem.gifts.find(
+																				(answerGift: any) =>
+																					answerGift.giftedBy === activeUser.id
+																		  ).giftAmount
+																		: "Add Gift"}
 																</span>
-																<FaGift //className={styles.upVote}
-																/>
+																<FaGift />
 															</div>
 														</Popover>
 													</div>
@@ -1160,8 +1215,6 @@ const NewsFeed = ({
 																: setShowAnswerDropDown(innerIdex);
 															console.log("innerIdex", innerIdex);
 														}}
-														//	onMouseEnter={() => setShowDropDown(!showDropDown)}
-														//onMouseLeave={() => setShowDropDown(false)}
 													>
 														<BsThreeDotsVertical
 															style={{
@@ -1222,7 +1275,8 @@ const UnAnsweredFeed = ({
 	setShowAnswerDropDown,
 	openAnswer,
 	setOpenAnswer,
-	sortBy,
+	upVoteQuestion,
+	unsatisfy,
 }: {
 	postsList: any[];
 	setPostList: Function;
@@ -1233,101 +1287,95 @@ const UnAnsweredFeed = ({
 	setShowAnswerDropDown: Function;
 	openAnswer: Number;
 	setOpenAnswer: Function;
-	sortBy: number;
+	upVoteQuestion: Function;
+	unsatisfy: Function;
 }) => {
-	const itemsForMapping = postsList;
-	// sortBy === 1
-	// 	? postsList.sort((firstItem, secondItem) =>firstItem.totalVotes - secondItem.totalVotes  )
-	// 	: sortBy === 2
-	// 	? postsList.sort(
-	// 			(firstItem, secondItem) => secondItem.bounty - firstItem.bounty
-	// 	  )
-	// 	: sortBy === 3
-	// 	? postsList.sort(
-	// 			(firstItem, secondItem) => firstItem.bounty - secondItem.bounty
-	// 	  )
-	// 	: postsList.sort(
-	// 			(firstItem, secondItem) =>
-	// 				secondItem.totalVotes - firstItem.totalVotes
-	// 	  );
+	const [gift, setGift] = React.useState(2);
+	const [open, setOpen] = React.useState(false);
+	const [activeIndex, setActiveIndex] = React.useState(-1);
+
+	const addGiftToQuestion = (call: boolean, completed: string) => {
+		// setOpen(call);
+		if (completed === "completed") {
+			let temp = [...postsList];
+			temp[activeIndex].gifts.push({
+				giftedBy: activeUser.id,
+				giftAmount: gift,
+			});
+			setPostList(temp);
+		}
+		setOpen(call);
+		// alert("activeindex" + activeIndex.toString());
+
+		setGift(2);
+		setActiveIndex(-1);
+	};
+	const countAllBounty = (list: any) => {
+		let bounty = 0;
+		for (let i = 0; i < list.length; i++) {
+			bounty += list[i].giftAmount;
+		}
+		return bounty;
+	};
+
+	const showError = () => {};
 	return (
 		<div className={styles.dashboardContent}>
-			{itemsForMapping.map((item, index) => {
-				return (
-					<div
-						style={{
-							display: "flex",
-							flexDirection: "column",
-							boxShadow:
-								"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
+			<AddGift {...{ gift, setGift, open, addGiftToQuestion }} />
 
-							paddingLeft: 7,
-							paddingRight: 7,
-							borderTopLeftRadius: index === 0 ? 12 : 0,
-							borderTopRightRadius: index === 0 ? 12 : 0,
-							paddingBottom: 10,
-							marginTop: 10,
-							paddingTop: 5,
-						}}
-					>
+			{postsList
+				.filter((iteem) => iteem.closed !== false)
+				.map((item, index) => {
+					return (
 						<div
+							key={index}
 							style={{
 								display: "flex",
-								flexDirection: "row",
-								alignItems: "flex-start",
-								justifyContent: "flex-start",
-								//	border: "2px solid red",
+								flexDirection: "column",
+								boxShadow:
+									index === openAnswer
+										? "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px"
+										: "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
 
+								paddingLeft: 7,
+								paddingRight: 7,
+								borderTopLeftRadius: index === 0 ? 12 : 0,
+								borderTopRightRadius: index === 0 ? 12 : 0,
 								paddingBottom: 10,
+								marginTop: 10,
 								paddingTop: 5,
+								border: index === openAnswer ? "1px solid #ad71ef" : 0,
 							}}
-							key={index}
 						>
-							{/* <div
+							<div
 								style={{
 									display: "flex",
-									flexDirection: "column",
-									alignItems: "center",
-									justifyContent: "space-between",
-									paddingTop: 20,
-									paddingRight: 5,
+									flexDirection: "row",
+									alignItems: "flex-start",
+									justifyContent: "flex-start",
+									paddingBottom: 10,
+									paddingTop: 5,
 								}}
+								key={index}
 							>
-								<div className={styles.votesDiv}>
-									<FaAngleDoubleUp className={styles.upVote} />
-									<span className={styles.votes}>{item.totalVotes}</span>
-									<FaAngleDoubleDown className={styles.downVote} />
-								</div>
-							</div> */}
-							<div //className={styles.post}
-								style={{
-									display: "flex",
-									flexDirection: "column",
-									//alignItems: "flex-start",
-									justifyContent: "space-between",
-									width: "100%",
-									height: "100%",
-									minHeight: 150,
-								}}
-							>
-								<div //className={styles.post}
+								<div
 									style={{
 										display: "flex",
 										flexDirection: "column",
-										alignItems: "flex-start",
 										justifyContent: "space-between",
-										paddingLeft: 10,
-										paddingTop: 5,
+										width: "100%",
+										height: "100%",
+										minHeight: 150,
 									}}
 								>
 									<div
 										style={{
 											display: "flex",
-											flexDirection: "row",
+											flexDirection: "column",
 											alignItems: "flex-start",
 											justifyContent: "space-between",
-											width: "100%",
-											paddingBottom: 5,
+											paddingLeft: 10,
+											paddingTop: 5,
 										}}
 									>
 										<div
@@ -1336,85 +1384,112 @@ const UnAnsweredFeed = ({
 												flexDirection: "row",
 												alignItems: "flex-start",
 												justifyContent: "space-between",
+												width: "100%",
+												paddingBottom: 5,
 											}}
 										>
-											<div className={styles.postHeader}>
-												<div>
-													<Image
-														src={item.url}
-														className={styles.postedByImage}
-														height={40}
-														width={40}
-														style={{ borderRadius: "50%" }}
-													/>
-												</div>
-												<span className={styles.postedBy}>{item.username}</span>{" "}
-												• <span className={styles.date}>{item.date}</span>
-											</div>
 											<div
-												className={styles.questionUpVote}
-												onMouseEnter={() => {
-													let temp = [...postsList];
-													temp[index].totalVotes += 1;
-													setPostList(temp);
-												}}
-												onMouseLeave={() => {
-													let temp = [...postsList];
-													temp[index].totalVotes -= 1;
-													setPostList(temp);
+												style={{
+													display: "flex",
+													flexDirection: "row",
+													alignItems: "flex-start",
+													justifyContent: "space-between",
 												}}
 											>
-												<FaCrown />{" "}
-												<span style={{ fontSize: 17 }}>{item.totalVotes}</span>
-											</div>
-										</div>
-										<div className={styles.bottomInteractions}>
-											{/* <GiBanknote className={styles.bountyLogo} />
-										<span className={styles.bountyAmount}>{item.bounty}</span> */}
-
-											<Popover
-												content={"You get 50$ if your answer is choosen"}
-												title=""
-											>
-												<div
-													style={{
-														marginRight: 10,
-														display: "flex",
-														alignItems: "center",
-														justifyContent: "center",
-														boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
-														padding: 5,
-														borderRadius: 8,
-													}}
-												>
-													<img
-														src="/OIP.png"
+												<div className={styles.postHeader}>
+													<div>
+														<Image
+															src={item.url}
+															className={styles.postedByImage}
+															height={40}
+															width={40}
+															style={{ borderRadius: "50%" }}
+														/>
+													</div>
+													<div
 														style={{
-															//	width: 22,
-
-															//		borderRadius: "50%",
-															//border: "1px solid #66d1de",
-
-															height: 22,
-														}}
-													/>
-													<span
-														style={{
-															fontSize: 15,
-															fontWeight: "bold",
-															color: "#000",
-															marginLeft: 5,
+															flexDirection: "row",
+															display: "flex",
+															alignItems: "flex-start",
 														}}
 													>
-														50$
+														<div
+															style={{
+																flexDirection: "column",
+																display: "flex",
+																alignItems: "flex-start",
+															}}
+														>
+															<span className={styles.postedBy}>
+																{item.firstName} {item.lastName}
+															</span>
+															<span
+																style={{
+																	fontSize: 11,
+																	fontWeight: "bold",
+																	marginTop: -5,
+																}}
+																className={styles.date}
+															>
+																{item.userName}
+															</span>
+														</div>
+														• <span className={styles.date}>{item.date}</span>
+													</div>
+												</div>
+												<div
+													className={
+														item.totalVotes.findIndex(
+															(ittm: string) => ittm === activeUser.id
+														) > -1
+															? styles.questionUpVoted
+															: styles.questionUpVote
+													}
+													onMouseEnter={() => {
+														if (
+															item.totalVotes.findIndex(
+																(ittm: string) => ittm === item.id
+															) > -1
+														) {
+															let temp = [...postsList];
+															temp[index].totalVotes += 1;
+															setPostList(temp);
+														}
+													}}
+													onMouseLeave={() => {
+														if (
+															item.totalVotes.findIndex(
+																(ittm: string) => ittm === item.id
+															) > -1
+														) {
+															let temp = [...postsList];
+															temp[index].totalVotes -= 1;
+															setPostList(temp);
+														}
+													}}
+													onClick={() => {
+														upVoteQuestion(item);
+													}}
+												>
+													<FaCrown />
+													<span style={{ fontSize: 17 }}>
+														{item.totalVotes.length}
 													</span>
 												</div>
-											</Popover>
-
-											{activeUser.id === item.id && (
+											</div>
+											<div className={styles.bottomInteractions}>
 												<Popover
-													content={"Tap to get a refund"}
-													title="Not satisfied with any answer?"
+													content={
+														"You get " +
+														parseInt(
+															item.bounty +
+																(item.gifts.length > 0
+																	? countAllBounty(item.gifts)
+																	: 0)
+														) +
+														" if your answer is choosen"
+													}
+													title=""
 												>
 													<div
 														style={{
@@ -1428,421 +1503,413 @@ const UnAnsweredFeed = ({
 														}}
 													>
 														<img
-															src="/gift-box.png"
-															alt="return"
+															src="/OIP.png"
 															style={{
 																height: 22,
-																objectFit: "contain",
 															}}
 														/>
-														<span style={{ color: "#ad71ef", fontSize: 13 }}>
-															Unsatisfied
+														<span
+															style={{
+																fontSize: 15,
+																fontWeight: "bold",
+																color: "#000",
+																marginLeft: 5,
+															}}
+														>
+															{item.bounty +
+																(item.gifts.length > 0
+																	? countAllBounty(item.gifts)
+																	: 0)}
 														</span>
 													</div>
 												</Popover>
-											)}
-											<Popover content={"Software Engineers"} title="">
-												<IoIosPeople
+
+												<Popover content={item.targetAudience} title="">
+													<IoIosPeople
+														style={{
+															color: "#0248a3",
+															fontSize: 25,
+															marginRight: 10,
+															marginLeft: 5,
+															fontWeight: "bold",
+															boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+															borderRadius: 8,
+														}}
+													/>
+												</Popover>
+
+												<div
 													style={{
-														color: "#0248a3",
-														fontSize: 25,
-														marginRight: 10,
-														marginLeft: 5,
-														fontWeight: "bold",
-														boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
-														borderRadius: 8,
+														display: "flex",
+														flexDirection: "column",
+														alignItems: "flex-end",
+														cursor: "pointer",
 													}}
-												/>
-											</Popover>
-											{/* <Popover
-												content={"You get 50$ if your answer is choosen"}
-												title=""
+													onClick={() => setShowDropDown(!showDropDown)}
+													//	onMouseEnter={() => setShowDropDown(!showDropDown)}
+													//onMouseLeave={() => setShowDropDown(false)}
+												>
+													<BsThreeDotsVertical
+														style={{
+															color: "#000",
+															fontSize: 17,
+															fontWeight: "bold",
+														}}
+													/>
+													{showDropDown && (
+														<div
+															style={{
+																display: "flex",
+																flexDirection: "column",
+																alignItems: "flex-end",
+																justifyContent: "space-between",
+																position: "fixed",
+																backgroundColor: "#fff",
+																borderRadius: 8,
+																marginTop: -85,
+																marginRight: -60,
+																boxShadow:
+																	"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
+															}}
+														>
+															<span className={styles.postDropDownItem}>
+																Translate
+															</span>
+															<span className={styles.postDropDownItem}>
+																Summarize
+															</span>
+														</div>
+													)}
+												</div>
+											</div>
+										</div>
+										<div className={styles.postQuestion}>{item.post}</div>
+									</div>
+									<div className={styles.postFooter}>
+										{(item.id === activeUser.id && item.bounty !== 0) ||
+										item.gifts.findIndex(
+											(innerItem: any) => innerItem.giftedBy === activeUser.id
+										) >= 0 ? (
+											<Popover
+												content={"Tap to get a refund"}
+												title="Not satisfied with any answer?"
 											>
 												<div
 													style={{
-														width: 24,
-														height: 24,
 														marginRight: 10,
-														borderRadius: "50%",
-														border: "2px solid #66d1de",
 														display: "flex",
 														alignItems: "center",
 														justifyContent: "center",
-														boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+														boxShadow: item.closed
+															? "none"
+															: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+														padding: 5,
+														borderRadius: 8,
+														backgroundColor: "#fff",
+														opacity: item.closed ? 0.5 : 1,
+														cursor: "pointer",
+													}}
+													onClick={() => {
+														item.closed ? showError() : unsatisfy(index);
 													}}
 												>
-													<span
+													<img
+														src="/gift-box.png"
+														alt="return"
 														style={{
-															fontSize: 9,
-															fontWeight: "bold",
-															color: "#de41f5",
+															height: 22,
+															objectFit: "contain",
 														}}
-													>
-														50$
+													/>
+													<span style={{ color: "#ad71ef", fontSize: 13 }}>
+														Unsatisfied
 													</span>
 												</div>
-											</Popover> */}
-											<div
-												style={{
-													display: "flex",
-													flexDirection: "column",
-													alignItems: "flex-end",
-													cursor: "pointer",
-												}}
-												onClick={() => setShowDropDown(!showDropDown)}
-												//	onMouseEnter={() => setShowDropDown(!showDropDown)}
-												//onMouseLeave={() => setShowDropDown(false)}
+											</Popover>
+										) : (
+											<Popover
+												content={"It can be as low as 2$"}
+												title="Contribute to get it answered quickly"
 											>
-												<BsThreeDotsVertical
+												<div
+													className={
+														styles.bottomInteractions +
+														" " +
+														styles.addGiftToQuestion
+													}
+													onClick={() => {
+														setOpen(true);
+														setActiveIndex(index);
+													}}
+												>
+													<AiFillGift />
+													<span
+														style={{
+															fontSize: 11,
+															paddingLeft: 5,
+														}}
+													>
+														Add Gift
+													</span>
+												</div>
+											</Popover>
+										)}
+
+										<Popover content={"Tap to view answers"} title="">
+											<div
+												className={
+													styles.bottomInteractions +
+													" " +
+													styles.viewAnswerButton
+												}
+												onClick={() => {
+													openAnswer === index
+														? setOpenAnswer(-1)
+														: setOpenAnswer(index);
+												}}
+											>
+												<RiQuestionAnswerLine
 													style={{
-														color: "#000",
+														marginRight: 7,
+														color: "#585858",
 														fontSize: 17,
 														fontWeight: "bold",
 													}}
 												/>
-												{showDropDown && (
-													<div
-														style={{
-															display: "flex",
-															flexDirection: "column",
-															alignItems: "flex-end",
-															justifyContent: "space-between",
-															position: "fixed",
-															backgroundColor: "#fff",
-															borderRadius: 8,
-															marginTop: -85,
-															marginRight: -60,
-															boxShadow:
-																"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
-														}}
-													>
-														<span className={styles.postDropDownItem}>
-															Translate
-														</span>
-														<span className={styles.postDropDownItem}>
-															Summarize
-														</span>
-													</div>
-												)}
-											</div>
-										</div>
-									</div>
-									<div className={styles.postQuestion}>{item.post}</div>
-								</div>
-								<div className={styles.postFooter}>
-									<Popover
-										content={"It can be as low as 2$"}
-										title="Contribute to get it answered quickly"
-									>
-										<div
-											className={
-												styles.bottomInteractions +
-												" " +
-												styles.addGiftToQuestion
-											}
-										>
-											<AiFillGift />
-											<span
-												style={{
-													fontSize: 11,
-													paddingLeft: 5,
-												}}
-											>
-												Add Gift
-											</span>
-										</div>
-									</Popover>
-									{/* <Popover
-										content={
-											"The amount of money you get after a successful answer"
-										}
-										title=""
-									>
-										{" "}
-										<div className={styles.bottomInteractions}>
-											<AiOutlineGift
-												style={{
-													marginRight: 7,
-													color: "#585858",
-													fontSize: 17,
-													fontWeight: "bold",
-												}}
-											/>
-											<span
-												style={{
-													fontSize: 12,
-													fontWeight: "bold",
-													color: "#585858",
-												}}
-											>
-												{" "}
-												50$
-											</span>
-										</div>
-									</Popover> */}
-									<Popover content={"Tap to view answers"} title="">
-										<div
-											className={
-												styles.bottomInteractions +
-												" " +
-												styles.viewAnswerButton
-											}
-											onClick={() => {
-												openAnswer === index
-													? setOpenAnswer(-1)
-													: setOpenAnswer(index);
-											}}
-										>
-											<RiQuestionAnswerLine
-												style={{
-													marginRight: 7,
-													color: "#585858",
-													fontSize: 17,
-													fontWeight: "bold",
-												}}
-											/>
-											<span
-												style={{
-													fontSize: 12,
-													fontWeight: "bold",
-													color: "#585858",
-												}}
-											>
-												{item.totalAnswered} Answers
-											</span>
-										</div>
-									</Popover>
-								</div>
-							</div>
-						</div>
-						{item.id !== activeUser.id && (
-							<AnswerTheQuestion
-								{...{ postsList, setPostList, activeUser, index }}
-							/>
-						)}
-						{openAnswer === index && (
-							<div style={{ marginTop: 10 }}>
-								{item.answers.map((innerItem: any, innerIdex: any) => {
-									return (
-										<div
-											key={innerIdex}
-											style={{
-												display: "flex",
-												alignItems: "flex-start",
-												justifyContent: "space-between",
-												flexDirection: "column",
-												padding: 10,
-												marginBottom: 2,
-												boxShadow:
-													"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
-											}}
-										>
-											<div
-												style={{
-													display: "flex",
-													alignItems: "center",
-													justifyContent: "space-between",
-													flexDirection: "row",
-													paddingLeft: 5,
-													width: "100%",
-												}}
-											>
-												<div
+												<span
 													style={{
-														display: "flex",
-														flexDirection: "row",
-														alignItems: "flex-start",
+														fontSize: 12,
+														fontWeight: "bold",
+														color: "#585858",
 													}}
 												>
-													<Image
-														src={innerItem.answeredBy.url}
-														className={styles.postedByImage}
-														height={40}
-														width={40}
-														style={{ borderRadius: "50%" }}
-													/>
-													<div
-														style={{
-															display: "flex",
-															flexDirection: "column",
-															alignItems: "flex-start",
-														}}
-													>
-														<span className={styles.postedBy}>
-															{innerItem.answeredBy.username}
-														</span>
-														<span className={styles.date}>
-															{innerItem.answeredBy.domain}
-														</span>{" "}
-													</div>
-													<div
-														className={styles.answerUpVote}
-														onMouseEnter={() => {
-															let temp = [...postsList];
-															if (
-																temp[index].answers[
-																	innerIdex
-																].answerVotes.findIndex(
-																	(itttem: any) => itttem === activeUser.id
-																) < 0
-															) {
-																temp[index].answers[innerIdex].answerVotes =
-																	temp[index].answers[
-																		innerIdex
-																	].answerVotes.push(activeUser.id);
-																setPostList(temp);
-															}
-														}}
-														onMouseLeave={() => {
-															let temp = [...postsList];
-															console.log(
-																"before remove",
-																temp[index].answers[innerIdex].answerVotes
-															);
-
-															console.log(
-																"after remove",
-																temp[index].answers[
-																	innerIdex
-																].answerVotes.filter(
-																	(ittm: any) => ittm !== activeUser.id
-																)
-															);
-															// if (
-															// 	temp[index].answers[
-															// 		innerIdex
-															// 	].answerVotes.findIndex(
-															// 		(itttem: any) => itttem === activeUser.id
-															// 	) < 0
-															// ) {
-															// 	temp[index].answers[innerIdex].answerVotes =
-															// 		temp[index].answers[
-															// 			innerIdex
-															// 		].answerVotes.filter(
-															// 			(ittm: any) => ittm !== activeUser.id
-															// 		);
-															// 	setPostList(temp);
-															// }
-														}}
-														// onClick={() => {
-														// 	let temp = [...postsList];
-														// 	if (
-														// 		temp[index].answers[
-														// 			innerIdex
-														// 		].answerVotes.findIndex(
-														// 			(itttem: any) => itttem === activeUser.id
-														// 		) < 0
-														// 	) {
-														// 		temp[index].answers[innerIdex].answerVotes =
-														// 			temp[index].answers[
-														// 				innerIdex
-														// 			].answerVotes.push(activeUser.id);
-														// 		setPostList(temp);
-														// 	}
-														// }}
-													>
-														<FaCrown />{" "}
-														<span style={{ fontSize: 13 }}>
-															{innerItem.answerVotes.length}
-														</span>
-													</div>
-												</div>
+													{item.totalAnswered} Answers
+												</span>
+											</div>
+										</Popover>
+									</div>
+								</div>
+							</div>
+							<div>
+								{item.id !== activeUser.id && (
+									<AnswerTheQuestion
+										{...{ postsList, setPostList, activeUser, index }}
+									/>
+								)}
+							</div>
+							{openAnswer === index && (
+								<div style={{ marginTop: 10 }}>
+									{item.answers.map((innerItem: any, innerIdex: any) => {
+										return (
+											<div
+												key={innerIdex}
+												style={{
+													display: "flex",
+													alignItems: "flex-start",
+													justifyContent: "space-between",
+													flexDirection: "column",
+													padding: 10,
+													marginBottom: 2,
+													boxShadow:
+														"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
+												}}
+											>
 												<div
 													style={{
 														display: "flex",
 														alignItems: "center",
-														justifyContent: "right",
+														justifyContent: "space-between",
 														flexDirection: "row",
+														paddingLeft: 5,
+														width: "100%",
 													}}
 												>
-													<div>
-														{" "}
-														<Popover
-															content={
-																"Like it? Gift them so they can contribute more."
-															}
-															title=""
+													<div
+														style={{
+															display: "flex",
+															flexDirection: "row",
+															alignItems: "flex-start",
+														}}
+													>
+														<Image
+															src={innerItem.answeredBy.url}
+															className={styles.postedByImage}
+															height={40}
+															width={40}
+															style={{ borderRadius: "50%" }}
+														/>
+														<div
+															style={{
+																display: "flex",
+																flexDirection: "column",
+																alignItems: "flex-start",
+															}}
 														>
-															<div className={styles.addGiftToAnswer}>
-																<span //className={styles.answerGiftText}
-																	style={{
-																		fontSize: 15,
-																		paddingRight: 5,
-																		paddingTop: 5,
-																	}}
-																>
-																	Gift
-																</span>
-																<FaGift //className={styles.upVote}
-																/>
-															</div>
-														</Popover>
+															<span className={styles.postedBy}>
+																{innerItem.answeredBy.username}
+															</span>
+															<span className={styles.date}>
+																{innerItem.answeredBy.domain}
+															</span>
+														</div>
+														<div
+															// className={styles.answerUpVote}
+															className={
+																postsList[index].answers[
+																	innerIdex
+																].answerVotes.findIndex(
+																	(itm: string) => itm === activeUser.id
+																) < 0
+																	? styles.answerUpVote
+																	: styles.answerUpVoted
+															}
+															// onMouseEnter={() => {
+															// 	let temp = [...postsList];
+															// 	if (
+															// 		temp[index].answers[
+															// 			innerIdex
+															// 		].answerVotes.findIndex(
+															// 			(itm: string) => itm === activeUser.id
+															// 		) < 0
+															// 	) {
+															// 		temp[index].answers[innerIdex].answerVotes.push(
+															// 			activeUser.id
+															// 		);
+															// 		setPostList(temp);
+															// 	}
+															// }}
+															// onMouseLeave={() => {
+															// 	let temp = [...postsList];
+															// 	if (
+															// 		temp[index].answers[
+															// 			innerIdex
+															// 		].answerVotes.findIndex(
+															// 			(itm: string) => itm === activeUser.id
+															// 		) >= 0
+															// 	) {
+															// 		temp[index].answers[innerIdex].answerVotes =
+															// 			temp[index].answers[
+															// 				innerIdex
+															// 			].answerVotes.filter(
+															// 				(ittm: string) => ittm !== activeUser.id
+															// 			);
+															// 		setPostList(temp);
+															// 	}
+															// }}
+															onClick={() => {
+																let temp = [...postsList];
+																if (
+																	temp[index].answers[
+																		innerIdex
+																	].answerVotes.findIndex(
+																		(itm: string) => itm === activeUser.id
+																	) < 0
+																) {
+																	temp[index].answers[
+																		innerIdex
+																	].answerVotes.push(activeUser.id);
+																	setPostList(temp);
+																	//alert("done");
+																}
+															}}
+														>
+															<FaCrown />
+															<span style={{ fontSize: 13 }}>
+																{innerItem.answerVotes.length}
+															</span>
+														</div>
 													</div>
 													<div
 														style={{
 															display: "flex",
-															flexDirection: "column",
-															alignItems: "flex-end",
-															cursor: "pointer",
+															alignItems: "center",
+															justifyContent: "right",
+															flexDirection: "row",
 														}}
-														onClick={() => {
-															showAnswerDropDown === innerIdex
-																? setShowAnswerDropDown(-1)
-																: setShowAnswerDropDown(innerIdex);
-															console.log("innerIdex", innerIdex);
-														}}
-														//	onMouseEnter={() => setShowDropDown(!showDropDown)}
-														//onMouseLeave={() => setShowDropDown(false)}
 													>
-														<BsThreeDotsVertical
-															style={{
-																color: "#000",
-																fontSize: 19,
-																fontWeight: "bold",
-															}}
-														/>
-														{showAnswerDropDown === innerIdex && (
-															<div
-																style={{
-																	display: "flex",
-																	flexDirection: "column",
-																	alignItems: "flex-end",
-																	justifyContent: "space-between",
-																	position: "fixed",
-																	backgroundColor: "#fff",
-																	borderRadius: 8,
-																	marginTop: -85,
-																	marginRight: -60,
-																	boxShadow:
-																		"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
-																}}
+														<div>
+															<Popover
+																content={
+																	"Like it? Gift them so they can contribute more."
+																}
+																title=""
 															>
-																<span className={styles.postDropDownItem}>
-																	Translate
-																</span>
-																<span className={styles.postDropDownItem}>
-																	Summarize
-																</span>
-															</div>
-														)}
+																<div className={styles.addGiftToAnswer}>
+																	<span
+																		style={{
+																			fontSize: 15,
+																			paddingRight: 5,
+																			paddingTop: 5,
+																		}}
+																	>
+																		Gift
+																	</span>
+																	<FaGift />
+																</div>
+															</Popover>
+														</div>
+														<div
+															style={{
+																display: "flex",
+																flexDirection: "column",
+																alignItems: "flex-end",
+																cursor: "pointer",
+															}}
+															onClick={() => {
+																showAnswerDropDown === innerIdex
+																	? setShowAnswerDropDown(-1)
+																	: setShowAnswerDropDown(innerIdex);
+																console.log("innerIdex", innerIdex);
+															}}
+														>
+															<BsThreeDotsVertical
+																style={{
+																	color: "#000",
+																	fontSize: 19,
+																	fontWeight: "bold",
+																}}
+															/>
+															{showAnswerDropDown === innerIdex && (
+																<div
+																	style={{
+																		display: "flex",
+																		flexDirection: "column",
+																		alignItems: "flex-end",
+																		justifyContent: "space-between",
+																		position: "fixed",
+																		backgroundColor: "#fff",
+																		borderRadius: 8,
+																		marginTop: -85,
+																		marginRight: -60,
+																		boxShadow:
+																			"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
+																	}}
+																>
+																	<span className={styles.postDropDownItem}>
+																		Translate
+																	</span>
+																	<span className={styles.postDropDownItem}>
+																		Summarize
+																	</span>
+																</div>
+															)}
+														</div>
 													</div>
 												</div>
+												<div style={{ paddingTop: 10, paddingLeft: 8 }}>
+													{innerItem.answerValue.text}
+												</div>
 											</div>
-											<div style={{ paddingTop: 10, paddingLeft: 8 }}>
-												{innerItem.answerValue.text}
-											</div>
-										</div>
-									);
-								})}
-							</div>
-						)}
-					</div>
-				);
-			})}
+										);
+									})}
+								</div>
+							)}
+						</div>
+					);
+				})}
 		</div>
 	);
 };
-
 const AnswerTheQuestion = ({
 	postsList,
 	setPostList,
@@ -2125,24 +2192,66 @@ function QuestionModal({
 	isModalOpen,
 	handleOk,
 	handleCancel,
+	postsList,
+	setPostList,
+	activeUser,
+	setIsModalOpen,
 }: {
 	isModalOpen: boolean;
 	handleOk: () => void;
 	handleCancel: () => void;
+	postsList: any;
+	setPostList: Function;
+	activeUser: any;
+	setIsModalOpen: Function;
 }) {
 	const [questionValue, setQuestionValue] = React.useState("");
 	const [questionTitle, setQuestionTitle] = React.useState<string>("");
-	const [isFocused, setIsFocused] = React.useState<boolean>(false);
+	// const [isFocused, setIsFocused] = React.useState<boolean>(false);
 	const [postingAs, setPostingAs] = React.useState<string>("");
-	const [isDisabled, setDisabled] = React.useState<boolean>(false);
+	const [gift, setGift] = React.useState(2);
 	const [isTagsVisible, setIsTagVisible] = React.useState<boolean>(false);
+	const [loading, setLoading] = React.useState(false);
 	const [open, setOpen] = React.useState(false);
-	const [specificUser, setSpecificUser] = React.useState(false);
+	const [targetedUsers, setTargetedUsers] = React.useState("Specific");
+	const [result, setResult] = React.useState("");
+	const [selectedOptions, setSelectedOptions] = React.useState([]);
+
 	const addQuestionToList = () => {
-		console.log(questionTitle);
-		console.log(isFocused);
+		console.log("callledd");
+		// console.log(questionTitle);
+		// console.log(isFocused);
+		setLoading(true);
+		let temp = [...postsList];
+		temp.push({
+			questionId: "question" + postsList.length,
+			id: activeUser.id,
+			firstName: activeUser.firstName,
+			lastName: activeUser.lastName,
+			userName: activeUser.userName,
+			url: activeUser.url,
+			post: questionTitle + "\n" + questionValue,
+			totalAnswered: 0,
+			sameQuestion: 0,
+			date: moment().format("LL"),
+			totalVotes: [],
+			bounty: 30,
+			answers: [],
+			gifts: [],
+			closed: false,
+			targetAudience:
+				targetedUsers === "Specific"
+					? result
+					: targetedUsers === "Experts"
+					? selectedOptions.join(",")
+					: "People Nearby",
+		});
+		setPostList(temp);
+		setLoading(false);
+
 		setOpen(false);
-		console.log(typeof setDisabled);
+		setIsModalOpen(false);
+		// console.log(typeof setDisabled);
 	};
 
 	return (
@@ -2311,8 +2420,7 @@ function QuestionModal({
 									paddingRight: 10,
 								}}
 							>
-								{" "}
-								Publicly{" "}
+								Publicly
 							</span>
 						</div>
 					</Tooltip>
@@ -2329,20 +2437,6 @@ function QuestionModal({
 						boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
 					}}
 				>
-					<span
-						style={{
-							color: "#bab6b6",
-							fontSize: 12,
-							fontWeight: "bold",
-							alignItems: "flex-end",
-							justifyContent: "flex-end",
-							display: "flex",
-							wordSpacing: 1,
-							paddingBottom: 10,
-						}}
-					>
-						Target people nearby?&nbsp; <Switch onChange={setIsFocused} />
-					</span>
 					<div
 						style={{
 							flexDirection: "column",
@@ -2492,23 +2586,13 @@ function QuestionModal({
 							}}
 						>
 							Add Gift
-							<AddTip open={open} setOpen={setOpen} />
+							<AddTip
+								open={open}
+								setOpen={setOpen}
+								gift={gift}
+								setGift={setGift}
+							/>
 						</div>
-
-						{/* <div
-							style={{
-								width: 25,
-								height: 25,
-								borderRadius: 25,
-								backgroundColor: "gray",
-								alignItems: "center",
-								justifyContent: "center",
-								display: "flex",
-								marginLeft: 5,
-							}}
-						>
-							<PlusOutlined style={{ fontSize: 16, fontWeight: "bold" }} />
-						</div> */}
 					</div>
 				</div>
 				{isTagsVisible && (
@@ -2538,7 +2622,7 @@ function QuestionModal({
 								// boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
 							}}
 						>
-							<TagsComponent />
+							<TagsComponent {...{ selectedOptions, setSelectedOptions }} />
 						</div>
 					</div>
 				)}
@@ -2550,17 +2634,30 @@ function QuestionModal({
 						backgroundColor: "#fff",
 						boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
 						marginTop: 15,
+						flexDirection: "column",
+						display: "flex",
 					}}
 				>
 					<span
 						style={{ color: "#bab6b6", fontSize: 17, fontWeight: "bolder" }}
 					>
-						Want to target a specific user?{" "}
-						<Switch onChange={setSpecificUser} />
+						Choose your targeted users
 					</span>
+					<Radio.Group
+						onChange={(e) => {
+							setTargetedUsers(e.target.value);
+						}}
+						value={targetedUsers}
+					>
+						<Space direction="vertical">
+							<Radio value={"Specific"}>Specific User</Radio>
+							<Radio value={"Experts"}>Experts</Radio>
+							<Radio value={"Nearby"}>People Nearby</Radio>
+						</Space>
+					</Radio.Group>
 				</div>
 
-				{specificUser && (
+				{targetedUsers === "Specific" && (
 					<div style={{ marginTop: 20, marginBottom: 3, paddingLeft: 5 }}>
 						<span
 							style={{
@@ -2574,7 +2671,7 @@ function QuestionModal({
 					</div>
 				)}
 
-				{specificUser && (
+				{targetedUsers === "Specific" && (
 					<div
 						style={{
 							//	marginTop: 10,
@@ -2588,7 +2685,7 @@ function QuestionModal({
 							// boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
 						}}
 					>
-						<AudienceComponent />
+						<AudienceComponent result={result} setResult={setResult} />
 					</div>
 				)}
 
@@ -2600,23 +2697,40 @@ function QuestionModal({
 						display: "flex",
 					}}
 				>
-					<button
-						className={isDisabled ? styles.disabledPrimary : styles.primary}
-						onClick={() => {
-							addQuestionToList();
-						}}
-					>
-						Post
-					</button>
+					{loading ? (
+						<Spin size="small" />
+					) : (
+						<button
+							className={
+								!questionTitle && !questionValue
+									? styles.disabledPrimary
+									: styles.primary
+							}
+							style={{
+								cursor:
+									!questionTitle && !questionValue ? "not-allowed" : "pointer",
+							}}
+							disabled={!questionTitle && !questionValue}
+							onClick={() => {
+								addQuestionToList();
+							}}
+						>
+							Post
+						</button>
+					)}
 				</div>
 			</div>
 		</Modal>
 	);
 }
 export default DashboardTemplate;
-const AudienceComponent = () => {
-	const [result, setResult] = React.useState("");
-
+const AudienceComponent = ({
+	result,
+	setResult,
+}: {
+	result: string;
+	setResult: Function;
+}) => {
 	const dropdownOptions = [
 		{
 			value: "Cristiano Ronaldo",
@@ -2672,7 +2786,13 @@ const AudienceComponent = () => {
 		</div>
 	);
 };
-const TagsComponent = () => {
+const TagsComponent = ({
+	selectedOptions,
+	setSelectedOptions,
+}: {
+	selectedOptions: any;
+	setSelectedOptions: Function;
+}) => {
 	// const [tags, setTags] = React.useState([
 	// 	{ id: "Thailand", text: "Thailand" },
 	// 	{ id: "India", text: "India" },
@@ -2685,7 +2805,6 @@ const TagsComponent = () => {
 	// 	{ value: "Downing Street" },
 	// 	{ value: "Wall Street" },
 	// ]);
-	const [selectedOptions, setSelectedOptions] = React.useState<string[]>([]);
 	const [dropdownOptions, setDropDownOptions] = React.useState([
 		{
 			value: "Trending",
@@ -2745,7 +2864,7 @@ const TagsComponent = () => {
 			value: "Beziehungen",
 		},
 	]);
-	const [result, setResult] = React.useState("");
+	// const [result, setResult] = React.useState("");
 	// const options = [
 	//   { value: "Burns Bay Road" },
 	//   { value: "Downing Street" },
@@ -2756,7 +2875,7 @@ const TagsComponent = () => {
 		let seleOpt: string[] = [...selectedOptions];
 
 		if (selectedOptions.length > 0) {
-			selectedOptions.forEach((selectedOpt) => {
+			selectedOptions.forEach((selectedOpt: any) => {
 				ddOptions = ddOptions.filter((item) => item.value !== selectedOpt);
 			});
 		}
@@ -2765,7 +2884,7 @@ const TagsComponent = () => {
 		setDropDownOptions(ddOptions);
 	};
 	const deletItem = (item: String) => {
-		let newArr = selectedOptions.filter((selectOpt) => selectOpt !== item);
+		let newArr = selectedOptions.filter((selectOpt: any) => selectOpt !== item);
 		setSelectedOptions(newArr);
 		let temp = dropdownOptions.filter((itt) => itt.value !== item);
 		setDropDownOptions(temp);
@@ -2794,7 +2913,7 @@ const TagsComponent = () => {
 				}}
 				bordered={false}
 				options={dropdownOptions}
-				value={result}
+				// value={result}
 				placeholder="Start by typing "
 				filterOption={(inputValue: any, option: any) =>
 					option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
@@ -2804,7 +2923,7 @@ const TagsComponent = () => {
 				}}
 			/>
 			<Row style={{ marginTop: 5, width: "100%" }}>
-				{selectedOptions.map((item, index) => {
+				{selectedOptions.map((item: any, index: number) => {
 					return (
 						<Col
 							key={index}
@@ -2848,20 +2967,27 @@ const TagsComponent = () => {
 	);
 };
 
-const AddTip = ({ open, setOpen }: { open: boolean; setOpen: Function }) => {
+const AddTip = ({
+	open,
+	setOpen,
+	gift,
+	setGift,
+}: {
+	open: boolean;
+	setOpen: Function;
+	gift: any;
+	setGift: Function;
+}) => {
 	const [confirmLoading, setConfirmLoading] = React.useState(false);
-	const [tipVal, setTipVal] = React.useState(2);
-	const [error, setError] = React.useState(false);
-	const [focused, setFocused] = React.useState(false);
+	// const [focused, setFocused] = React.useState(false);
 
 	const handleOk = () => {
 		setConfirmLoading(true);
 
 		setTimeout(() => {
-			setOpen(false);
-			console.log(tipVal + "--" + confirmLoading);
 			setConfirmLoading(false);
-		}, 2000);
+			setOpen(false);
+		}, 1000);
 	};
 
 	const handleCancel = () => {
@@ -2899,23 +3025,19 @@ const AddTip = ({ open, setOpen }: { open: boolean; setOpen: Function }) => {
 						type={"number"}
 						onChange={(e) => {
 							try {
-								let val = parseFloat(e.target.value.toString());
-								if (val < 2) {
-									setError(true);
-								} else {
-									setTipVal(val);
-									setError(false);
-								}
+								//let val = parseFloat(e.target.value.toString());
+
+								setGift(parseFloat(e.target.value.toString()));
 							} catch (error) {
 								console.log("err", error);
 							}
 						}}
-						onFocus={() => {
-							setFocused(true);
-						}}
-						onBlur={() => {
-							setFocused(false);
-						}}
+						// onFocus={() => {
+						// 	setFocused(true);
+						// }}
+						// onBlur={() => {
+						// 	setFocused(false);
+						// }}
 						style={{
 							color: "gray",
 							fontSize: 17,
@@ -2929,33 +3051,37 @@ const AddTip = ({ open, setOpen }: { open: boolean; setOpen: Function }) => {
 							outline: "none",
 						}}
 					/>
-					{focused && <span style={{ color: "#000" }}></span>}
-					{error && <span style={{ color: "red" }}>Minimum gift is 2$</span>}
+					{gift < 2 && <span style={{ color: "red" }}>Minimum gift is 2$</span>}
 				</div>
-				<button
-					type="button"
-					style={{
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
-						fontSize: 16,
-						fontWeight: "bold",
-						border: "1px solid #de41f5",
-						borderRadius: 8,
-						color: "#66d1de",
-						textAlign: "center",
-						padding: "5px 10px 5px 10px",
-						backgroundColor: "#fff",
-						boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
-						cursor: "pointer",
-						width: "100%",
-						maxWidth: 110,
-						marginLeft: 5,
-					}}
-					onClick={handleOk}
-				>
-					<RiCoinsFill style={{ color: "golden" }} /> Add Gift
-				</button>
+				{confirmLoading ? (
+					<Spin size="small" />
+				) : (
+					<button
+						type="button"
+						style={{
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+							fontSize: 16,
+							fontWeight: "bold",
+							border: "1px solid #de41f5",
+							borderRadius: 8,
+							color: "#66d1de",
+							textAlign: "center",
+							padding: "5px 10px 5px 10px",
+							backgroundColor: "#fff",
+							boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+							cursor: "pointer",
+							width: "100%",
+							maxWidth: 110,
+							marginLeft: 5,
+						}}
+						disabled={gift < 2}
+						onClick={handleOk}
+					>
+						<RiCoinsFill style={{ color: "golden" }} /> Add Gift
+					</button>
+				)}
 			</div>
 		</Modal>
 	);

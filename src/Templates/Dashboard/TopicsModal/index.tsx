@@ -98,7 +98,9 @@ export default function TopicModal({
 				}}
 				placeholder="Search topics"
 				onChange={(e) => {
-					setSearchQuery(e.target.value);
+					if (searchQuery.length < 100) {
+						setSearchQuery(e.target.value);
+					}
 				}}
 			/>
 			<Row>
