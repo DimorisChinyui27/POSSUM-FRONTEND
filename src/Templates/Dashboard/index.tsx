@@ -943,7 +943,7 @@ const NewsFeed = ({
 													cursor: "pointer",
 												}}
 												onClick={() => {
-													item.closed ? showError() : unsatisfy(index);
+													unsatisfy(index);
 												}}
 											>
 												<img
