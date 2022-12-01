@@ -72,7 +72,7 @@ export default function OnboardingTemplate() {
 		if (activeStep === 1) {
 			router.push("/dashboard");
 		}
-		setActiveStep(activeStep + 1);
+		setActiveStep(1);
 	};
 
 	const checkVals = () => {

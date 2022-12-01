@@ -77,7 +77,6 @@ export default function PaymentOptions({
 			)}
 			{activeDiv === 1 && (
 				<div className="animate__animated animate__fadeInRight">
-					{" "}
 					<div
 						style={{
 							width: 300,
@@ -92,7 +91,6 @@ export default function PaymentOptions({
 			)}
 			{activeDiv === 2 && (
 				<div className="animate__animated animate__fadeInRight">
-					{" "}
 					<div
 						style={{
 							width: 300,
