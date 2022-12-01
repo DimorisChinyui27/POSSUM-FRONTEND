@@ -24,13 +24,13 @@ import { TbYoga } from "react-icons/tb";
 import styles from "./index.module.css";
 import React from "react";
 //import Image from "next/image";
-import PaymentOptions from "./PaymentOptions";
+// import PaymentOptions from "./PaymentOptions";
 import { useRouter } from "next/router";
 const dateFormat = "DD/MM/YYYY";
 const { Option } = Select;
 
 export default function OnboardingTemplate() {
-	const [activeStep, setActiveStep] = React.useState<number>(0);
+	const [activeStep, setActiveStep] = React.useState(0);
 	const [language, setLanguage] = React.useState<string>("");
 	const [languageError, setLanguageError] = React.useState(false);
 	const [topicOfInterest, setTopicOfInterest] = React.useState([]);
@@ -201,7 +201,7 @@ export default function OnboardingTemplate() {
 							</div>
 						</div>
 					</div>
-				)}{" "}
+				)}
 				<br />
 				{activeStep === 1 && (
 					<div
@@ -213,11 +213,7 @@ export default function OnboardingTemplate() {
 							flexDirection: "column",
 						}}
 					>
-						<PaymentOptions
-							activeStep={activeStep}
-							setActiveStep={setActiveStep}
-							changeStep={changeStep}
-						/>
+						{/* <PaymentOptions activeStep={activeStep} changeStep={changeStep} /> */}
 					</div>
 				)}
 				<br />

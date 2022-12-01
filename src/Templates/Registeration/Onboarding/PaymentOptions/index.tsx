@@ -7,11 +7,9 @@ import { Typo } from "src/Components";
 
 export default function PaymentOptions({
 	activeStep,
-	setActiveStep,
 	changeStep,
 }: {
 	activeStep: number;
-	setActiveStep: Dispatch<SetStateAction<number>>;
 	changeStep: Function;
 }) {
 	const [activeDiv, setActiveDiv] = React.useState(0);
@@ -28,7 +26,6 @@ export default function PaymentOptions({
 		setIsModalOpen(false);
 		changeStep();
 		console.log("activestp", activeStep);
-		console.log(typeof setActiveStep);
 	};
 
 	const handleCancel = () => {
