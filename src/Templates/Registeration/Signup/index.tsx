@@ -1,5 +1,5 @@
 import { Button, Possum, Typo } from "../../../Components";
-import { Row, Col, Space, Input, Popover, Tooltip } from "antd";
+import { Row, Col, Space, Input, Popover, Tooltip, Spin } from "antd";
 // import { useForm, SubmitHandler } from "react-hook-form";
 // import { User } from "src/Interfaces";
 import { MdFacebook } from "react-icons/md";
@@ -53,6 +53,7 @@ function SignupFunc() {
 	const [passVisible, setPassVisible] = React.useState<boolean>(false);
 	const [confirmPassVisible, setConfirmPassVisible] =
 		React.useState<boolean>(false);
+	const [loading, setLoading] = React.useState(false);
 
 	// const {
 	// 	register,
@@ -69,9 +70,14 @@ function SignupFunc() {
 		setConfirmPasswordError(!confirmPassword);
 		setEmailError(!email);
 		if (!email || !password || !confirmPassword) {
+			setLoading(false);
 			return;
 		} else {
-			router.push("/login");
+			setTimeout(() => {
+				setLoading(false);
+
+				router.push("/login");
+			}, 1000);
 		}
 	};
 
@@ -101,6 +107,7 @@ function SignupFunc() {
 			<form
 				onSubmit={(e) => {
 					e.preventDefault();
+					setLoading(true);
 					handleSubmit();
 				}}
 				style={{ width: "100%" }}
@@ -202,12 +209,18 @@ function SignupFunc() {
 						</Link>
 					</div> */}
 					<div className={styles.topMargin}></div>
-					<Button
-						type="submit"
-						btnType="primary"
-						title="SIGNUP"
-						//onClick={undefined}
-					/>{" "}
+					{loading ? (
+						<div style={{ display: "flex", justifyContent: "center" }}>
+							<Spin size="small" />
+						</div>
+					) : (
+						<Button
+							type="submit"
+							btnType="primary"
+							title="SIGNUP"
+							//onClick={undefined}
+						/>
+					)}
 					<div className={styles.topMargin}></div>
 					<div className={styles.alignCenter}>
 						<Typo.Label title="Already have an account?" direction="right" />

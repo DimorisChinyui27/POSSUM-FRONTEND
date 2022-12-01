@@ -69,7 +69,7 @@ export default function OnboardingTemplate() {
 		"Beziehungen",
 	];
 	const changeStep = () => {
-		if (activeStep == 1) {
+		if (activeStep === 1) {
 			router.push("/dashboard");
 		}
 		setActiveStep(activeStep + 1);
@@ -133,7 +133,7 @@ export default function OnboardingTemplate() {
 								maxWidth: 350,
 							}}
 						>
-							<div className={styles.colLeftAlign}>
+							<div className={styles.colLeftAlign} style={{ width: "100%" }}>
 								<Typo.Label title="Birth Date" />
 								<Tooltip
 									trigger={["focus"]}
@@ -150,6 +150,7 @@ export default function OnboardingTemplate() {
 											setDateError(false);
 										}}
 										size="large"
+										style={{ width: "100%" }}
 									/>
 									{dateError && (
 										<span style={{ color: "red" }}>
