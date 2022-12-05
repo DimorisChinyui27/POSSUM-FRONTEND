@@ -24,19 +24,19 @@ import { TbYoga } from "react-icons/tb";
 import styles from "./index.module.css";
 import React from "react";
 //import Image from "next/image";
-// import PaymentOptions from "./PaymentOptions";
-// import { useRouter } from "next/router";
+import PaymentOptions from "./PaymentOptions";
+import { useRouter } from "next/router";
 const dateFormat = "DD/MM/YYYY";
 const { Option } = Select;
 
 export default function OnboardingTemplate() {
-	const [activeStep, setActiveStep] = React.useState(0);
+	const [activeStep, setActiveStep] = React.useState("primary");
 	const [language, setLanguage] = React.useState<string>("");
 	const [languageError, setLanguageError] = React.useState(false);
 	const [topicOfInterest, setTopicOfInterest] = React.useState([]);
 	const [date, setDate] = React.useState("");
 	const [dateError, setDateError] = React.useState(false);
-	// const router = useRouter();
+	const router = useRouter();
 	const handleChange = (value: string) => {
 		setLanguage(value);
 	};
@@ -68,12 +68,12 @@ export default function OnboardingTemplate() {
 		"Youtube",
 		"Beziehungen",
 	];
-	// const changeStep = () => {
-	// 	if (activeStep === 1) {
-	// 		router.push("/dashboard");
-	// 	}
-	// 	setActiveStep(1);
-	// };
+	const changeStep = () => {
+		if (activeStep === "secondary") {
+			router.push("/dashboard");
+		}
+		setActiveStep("secondary");
+	};
 
 	const checkVals = () => {
 		setLanguageError(!language);
@@ -81,7 +81,7 @@ export default function OnboardingTemplate() {
 		if (!language || !date) {
 			return;
 		} else {
-			setActiveStep(1);
+			changeStep();
 		}
 	};
 	return (
@@ -104,7 +104,7 @@ export default function OnboardingTemplate() {
 						"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
 				}}
 			>
-				{activeStep === 0 && (
+				{activeStep === "primary" && (
 					<div
 						style={{
 							height: "100%",
@@ -140,6 +140,7 @@ export default function OnboardingTemplate() {
 									title={""}
 									placement="topLeft"
 									overlayClassName="numeric-input"
+									style={{ display: "flex" }}
 								>
 									<DatePicker
 										defaultValue={moment("01/01/2015", dateFormat)}
@@ -150,7 +151,7 @@ export default function OnboardingTemplate() {
 											setDateError(false);
 										}}
 										size="large"
-										style={{ width: "100%" }}
+										style={{ width: 350, display: "flex" }}
 									/>
 									{dateError && (
 										<span style={{ color: "red" }}>
@@ -203,7 +204,7 @@ export default function OnboardingTemplate() {
 					</div>
 				)}
 				<br />
-				{activeStep === 1 && (
+				{activeStep === "secondary" && (
 					<div
 						style={{
 							width: "100%",
@@ -213,11 +214,11 @@ export default function OnboardingTemplate() {
 							flexDirection: "column",
 						}}
 					>
-						{/* <PaymentOptions activeStep={activeStep} changeStep={changeStep} /> */}
+						<PaymentOptions changeStep={changeStep} />
 					</div>
 				)}
 				<br />
-				{activeStep === 0 && (
+				{activeStep === "primary" && (
 					<Popover content="Let the games begin :)">
 						<div style={{ width: 350, marginTop: 20 }}>
 							<button

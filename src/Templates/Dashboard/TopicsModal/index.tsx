@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal, Row, Col } from "antd";
+import AppContext from "src/Context/Context";
 
 export default function TopicModal({
 	isTopicModalOpen,
@@ -9,70 +10,12 @@ export default function TopicModal({
 	setIsTopicModalOpen: Function;
 }) {
 	const [searchQuery, setSearchQuery] = React.useState("");
-	const [topics, setTopics] = React.useState([
-		{
-			value: "Trending",
-		},
-		{
-			value: "Deutschland",
-		},
-		{
-			value: "Memes",
-		},
-		{
-			value: "Wortwitze",
-		},
-		{
-			value: "Lustig!",
-		},
-		{
-			value: "Interessant!",
-		},
-		{
-			value: "Gaming",
-		},
-		{
-			value: "Konsolen",
-		},
-		{
-			value: "Spiele",
-		},
-		{
-			value: "Beliebte Spiele",
-		},
-		{
-			value: "Entertainment",
-		},
-		{
-			value: "Filme",
-		},
-		{
-			value: "TV",
-		},
-		{
-			value: "Sendungen & Serien",
-		},
-		{
-			value: "Fan Theorien",
-		},
-		{
-			value: "Musik",
-		},
-		{
-			value: "Podcasts",
-		},
-		{
-			value: "Youtube",
-		},
-		{
-			value: "Beziehungen",
-		},
-	]);
+	const [globalState, setGlobalState] = React.useContext<any>(AppContext);
 	const addToList = () => {
-		let temp = [...topics];
+		let temp = [...globalState.topics];
 		temp.push({ value: searchQuery });
 		setSearchQuery("");
-		setTopics(temp);
+		setGlobalState({ ...globalState, topics: temp });
 	};
 	return (
 		<Modal
@@ -103,12 +46,45 @@ export default function TopicModal({
 					}
 				}}
 			/>
+			<div
+				style={{
+					alignItems: "flex-end",
+					justifyContent: "flex-end",
+					display: "flex",
+					flexDirection: "column",
+				}}
+			>
+				{/* <span
+					style={{
+						fontSize: 12,
+						letterSpacing: 1,
+						color: "#bababa",
+						textAlign: "center",
+						paddingRight: 20,
+					}}
+				>
+					{searchQuery.length}/100
+				</span> */}
+				{searchQuery.length >= 80 && (
+					<span
+						style={{
+							fontSize: 12,
+							letterSpacing: 1,
+							color: "#bababa",
+							textAlign: "center",
+							paddingRight: 20,
+						}}
+					>
+						Maximum character limit is 100
+					</span>
+				)}
+			</div>
 			<Row>
-				{topics.filter((item) =>
+				{globalState.topics.filter((item: any) =>
 					item.value.toString().includes(searchQuery.trim())
 				).length > 0 ? (
-					topics
-						.filter((item) =>
+					globalState.topics
+						.filter((item: any) =>
 							item.value.toString().includes(searchQuery.trim())
 						)
 						.map((item: any, index: number) => {

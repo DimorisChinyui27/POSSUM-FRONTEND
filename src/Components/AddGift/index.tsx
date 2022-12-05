@@ -63,7 +63,7 @@ const AddGift = ({
 						onChange={(e) => {
 							try {
 								let val = parseFloat(e.target.value.toString());
-								if (val < 2) {
+								if (val < 5) {
 									setError(true);
 								} else {
 									setGift(val);
@@ -90,10 +90,11 @@ const AddGift = ({
 							borderRadius: 8,
 							marginBottom: 2,
 							outline: "none",
+							paddingLeft: 10,
 						}}
 					/>
 					{focused && <span style={{ color: "#000" }}></span>}
-					{error && <span style={{ color: "red" }}>Minimum gift is 2$</span>}
+					{error && <span style={{ color: "red" }}>Minimum gift is 5$</span>}
 				</div>
 				{confirmLoading ? (
 					<Spin size="small" />
@@ -118,6 +119,7 @@ const AddGift = ({
 							maxWidth: 110,
 							marginLeft: 5,
 						}}
+						disabled={gift < 5}
 						onClick={handleOk}
 					>
 						<RiCoinsFill style={{ color: "golden" }} /> Add Gift

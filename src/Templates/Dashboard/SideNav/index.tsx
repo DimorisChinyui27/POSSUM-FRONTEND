@@ -10,8 +10,11 @@ import { RiSecurePaymentFill } from "react-icons/ri";
 import { FaUserEdit } from "react-icons/fa";
 import styles from "./index.module.css";
 import TopicModal from "../TopicsModal";
+import AppContext from "src/Context/Context";
 const SideNav = () => {
 	const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
+	const [globalState, setGlobalState] = React.useContext<any>(AppContext);
+
 	const [isTopicModalOpen, setIsTopicModalOpen] =
 		React.useState<boolean>(false);
 
@@ -21,6 +24,13 @@ const SideNav = () => {
 
 	const handleCancel = () => {
 		setIsModalOpen(false);
+	};
+	const toggleQuestionModal = () => {
+		console.log(globalState);
+		setGlobalState({
+			...globalState,
+			questionModal: !globalState.questionModal,
+		});
 	};
 	return (
 		<div
@@ -100,6 +110,7 @@ const SideNav = () => {
 					color: "#fff",
 					backgroundImage: "linear-gradient(to bottom left, #e839f6, #61d8de)",
 				}}
+				onClick={toggleQuestionModal}
 			>
 				Post Question
 			</span>

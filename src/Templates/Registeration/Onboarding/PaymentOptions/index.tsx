@@ -6,10 +6,10 @@ import styles from "./index.module.css";
 import { Typo } from "src/Components";
 
 export default function PaymentOptions({
-	activeStep,
+	// activeStep,
 	changeStep,
 }: {
-	activeStep: number;
+	// activeStep: string;
 	changeStep: Function;
 }) {
 	const [activeDiv, setActiveDiv] = React.useState(0);
@@ -25,7 +25,7 @@ export default function PaymentOptions({
 	const submitDetails = () => {
 		setIsModalOpen(false);
 		changeStep();
-		console.log("activestp", activeStep);
+		// console.log("activestp", activeStep);
 	};
 
 	const handleCancel = () => {
@@ -395,7 +395,7 @@ const ModalContent = ({
 			{activeDiv === 2 && (
 				<div>
 					<Space direction="vertical" style={{ width: "100%", paddingTop: 15 }}>
-						<Typo.Label title="Venmo Email, Username or Password" />
+						<Typo.Label title="Venmo Email or Username" />
 						<Input
 							placeholder="Type your venmo email or username"
 							size="large"

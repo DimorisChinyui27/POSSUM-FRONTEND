@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 //import "~antd/dist/antd.css";
 import "antd/dist/antd.css";
 import "animate.css";
-
+import React from "react";
 function MyApp({ Component, pageProps }: AppProps) {
 	return <Component {...pageProps} />;
 }

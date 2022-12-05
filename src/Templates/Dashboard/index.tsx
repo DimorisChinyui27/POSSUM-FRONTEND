@@ -46,7 +46,6 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 // import { MdOutlineSlowMotionVideo } from 'react-icons/md'
 import { RiCoinsFill } from "react-icons/ri";
 import { AiFillGift } from "react-icons/ai";
-import { activeUser } from "src/Interfaces";
 import moment from "moment";
 import { TbArrowsSort } from "react-icons/tb";
 import {
@@ -56,6 +55,9 @@ import {
 import Video from "src/Components/Video";
 import ImageUpload from "src/Components/ImageUpload";
 import AddGift from "src/Components/AddGift";
+import AppContext from "src/Context/Context";
+import TopicModal from "./TopicsModal";
+// import { activeUser } from "src/Context/data";
 // const { TextArea } = Input;
 const sortModalOptions = [
 	"Default: Votes Descending",
@@ -65,33 +67,16 @@ const sortModalOptions = [
 ];
 
 const DashboardTemplate = () => {
-	const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
+	const [globalState, setGlobalState] = React.useContext<any>(AppContext);
 	const [showDropDown, setShowDropDown] = React.useState<boolean>(false);
 	const [activeTab, setActiveTab] = React.useState<number>(0);
+
 	const [showAnswerDropDown, setShowAnswerDropDown] =
 		React.useState<number>(-1);
 	const [showsortModal, setShowSortModal] = React.useState(false);
-
 	const [sortBy, setSortBy] = React.useState(0);
-
-	const activeUser: any = {
-		id: "7",
-		userName: "@fashionIconCosta",
-		firstName: "Alex",
-		lastName: "Costa",
-		url: "/costa.jpg",
-		crowns: 765,
-
-		domain: "Fashion Influencer",
-		description:
-			"Men's Fashion | Grooming | Lifestyle Founder @forteseries @apricusskincare @aetosapparel",
-		subDescription: "3.7M YouTube | 1.4M TikTok",
-		totalAnswered: "200",
-		totalAsked: "73",
-		totalCrowns: "267",
-		interestedTopics: ["Lifestyle", "Grooming", "Men's Fashion"],
-	};
 	const [openAnswer, setOpenAnswer] = React.useState<number>(0);
+	const [filterQuestion, setFilterQuestion] = React.useState("");
 	const [postsList, setPostList] = React.useState([
 		{
 			questionId: "adsadasd",
@@ -233,25 +218,19 @@ const DashboardTemplate = () => {
 		},
 	]);
 
-	const handleOk = () => {
-		setIsModalOpen(false);
-	};
-
-	const handleCancel = () => {
-		setIsModalOpen(false);
-	};
 	const upVoteQuestion = (item: any) => {
+		const activeUser = { ...globalState.activeUser };
 		let temp = [...postsList];
 		let ind = temp.findIndex((itm) => itm.questionId === item.questionId);
 		if (
 			temp[ind].totalVotes.findIndex(
-				(innerItem) => innerItem == activeUser.id
+				(innerItem: any) => innerItem == activeUser.id
 			) < 0
 		) {
 			temp[ind].totalVotes.push(activeUser.id);
 		} else {
 			temp[ind].totalVotes = temp[ind].totalVotes.filter(
-				(votes) => votes !== activeUser.id
+				(votes: any) => votes !== activeUser.id
 			);
 		}
 		setPostList(temp);
@@ -266,11 +245,13 @@ const DashboardTemplate = () => {
 
 	const unsatisfy = (index: number) => {
 		let temp = [...postsList];
+		const activeUser = { ...globalState.activeUser };
+
 		if (temp[index].id === activeUser.id && temp[index].bounty !== 0) {
 			temp[index].bounty = 0;
 		} else {
 			let ind = temp[index].gifts.findIndex(
-				(innerItem) => innerItem.giftedBy === activeUser.id
+				(innerItem: any) => innerItem.giftedBy === activeUser.id
 			);
 			temp[index].gifts[ind].giftAmount = 0;
 		}
@@ -285,10 +266,44 @@ const DashboardTemplate = () => {
 		let arr: any[] = temp[qIndex].answers[answrIndex].gifts;
 
 		arr.push({
-			giftedBy: activeUser.id,
+			giftedBy: globalState.activeUser.id,
 			giftAmount: amount,
 		});
 		setPostList(temp);
+	};
+	const toggleQuestionModal = () => {
+		// console.log(globalState);
+		setGlobalState({
+			...globalState,
+			questionModal: !globalState.questionModal,
+		});
+	};
+	const satisfied = (qIndex: any, answerIndex: any) => {
+		const tenpList: any = [...postsList];
+		if (globalState.activeUser.id === tenpList[qIndex].id) {
+			tenpList[qIndex].answers[answerIndex].gifts.push({
+				giftedBy: globalState.activeUser.id,
+				giftAmount: tenpList[qIndex].bounty,
+			});
+			tenpList[qIndex].bounty = 0;
+		} else {
+			let findIndex = tenpList[qIndex].gifts.findIndex(
+				(item: any) => item.giftedBy === globalState.activeUser.id
+			);
+			tenpList[qIndex].answers[answerIndex].gifts.push({
+				giftedBy: globalState.activeUser.id,
+				giftAmount: tenpList[qIndex].gifts[findIndex].giftAmount,
+			});
+			tenpList[qIndex].gifts = tenpList[qIndex].gifts.filter(
+				(item: any) => item.giftedBy !== globalState.activeUser.id
+			);
+		}
+
+		if (tenpList[qIndex].bounty === 0 && tenpList[qIndex].gifts.length === 0) {
+			tenpList[qIndex].closed = true;
+		}
+
+		setPostList(tenpList);
 	};
 	return (
 		<div style={{ paddingTop: 5 }}>
@@ -309,7 +324,7 @@ const DashboardTemplate = () => {
 				}}
 			>
 				<Image
-					src={activeUser.url}
+					src={globalState.activeUser.url}
 					style={{
 						borderRadius: "50%",
 						objectFit: "contain",
@@ -329,7 +344,7 @@ const DashboardTemplate = () => {
 				<div
 					style={{
 						display: "flex",
-						flexDirection: "column",
+						flexDirection: "row",
 						alignItems: "center",
 						justifyContent: "space-between",
 						width: "100%",
@@ -338,7 +353,7 @@ const DashboardTemplate = () => {
 					}}
 				>
 					<input
-						placeholder="What do you want to ask..."
+						placeholder="Search for questions..."
 						style={{
 							outline: "none",
 							borderRadius: 18,
@@ -346,21 +361,22 @@ const DashboardTemplate = () => {
 							width: "100%",
 							border: "1px solid gray",
 							paddingLeft: 20,
+							// color: "#dadada",
 						}}
-						onClick={() => {
-							setIsModalOpen(true);
+						onChange={(e) => {
+							setFilterQuestion(e.target.value);
 						}}
 					/>
 				</div>
 			</div>
 			<QuestionModal
-				isModalOpen={isModalOpen}
-				setIsModalOpen={setIsModalOpen}
-				handleCancel={handleCancel}
-				handleOk={handleOk}
+				isModalOpen={globalState.questionModal}
+				setIsModalOpen={toggleQuestionModal}
+				handleCancel={toggleQuestionModal}
+				handleOk={toggleQuestionModal}
 				setPostList={setPostList}
 				postsList={postsList}
-				activeUser={activeUser}
+				activeUser={globalState.activeUser}
 			/>
 			<div
 				style={{
@@ -431,20 +447,25 @@ const DashboardTemplate = () => {
 
 			{activeTab === 0 ? (
 				<NewsFeed
-					{...{
-						postsList,
-						setPostList,
-						activeUser,
-						showDropDown,
-						setShowDropDown,
-						showAnswerDropDown,
-						setShowAnswerDropDown,
-						openAnswer,
-						setOpenAnswer,
-						upVoteQuestion,
-						unsatisfy,
-						addGiftToAnswer,
-					}}
+					postsList={
+						filterQuestion
+							? postsList.filter((item: any) =>
+									item.post.toString().toLowerCase().includes(filterQuestion)
+							  )
+							: postsList
+					}
+					setPostList={setPostList}
+					activeUser={globalState.activeUser}
+					showDropDown={showDropDown}
+					setShowAnswerDropDown={setShowDropDown}
+					showAnswerDropDown={showAnswerDropDown}
+					setShowDropDown={setShowAnswerDropDown}
+					openAnswer={openAnswer}
+					setOpenAnswer={setOpenAnswer}
+					upVoteQuestion={upVoteQuestion}
+					unsatisfy={unsatisfy}
+					addGiftToAnswer={addGiftToAnswer}
+					satisfied={satisfied}
 				/>
 			) : (
 				<div style={{ display: "flex", flexDirection: "column" }}>
@@ -540,19 +561,25 @@ const DashboardTemplate = () => {
 						</div>
 					</div>
 					<UnAnsweredFeed
-						{...{
-							postsList,
-							setPostList,
-							activeUser,
-							showDropDown,
-							setShowDropDown,
-							showAnswerDropDown,
-							setShowAnswerDropDown,
-							openAnswer,
-							setOpenAnswer,
-							upVoteQuestion,
-							unsatisfy,
-						}}
+						postsList={
+							filterQuestion
+								? postsList.filter((item: any) =>
+										item.post.toString().toLowerCase().includes(filterQuestion)
+								  )
+								: postsList
+						}
+						setPostList={setPostList}
+						activeUser={globalState.activeUser}
+						showDropDown={showDropDown}
+						setShowDropDown={setShowDropDown}
+						showAnswerDropDown={showAnswerDropDown}
+						setShowAnswerDropDown={setShowAnswerDropDown}
+						openAnswer={openAnswer}
+						setOpenAnswer={setOpenAnswer}
+						upVoteQuestion={upVoteQuestion}
+						unsatisfy={unsatisfy}
+						// addGiftToAnswer={
+						// 	addGiftToAnswer}
 					/>
 				</div>
 			)}
@@ -572,10 +599,11 @@ const NewsFeed = ({
 	upVoteQuestion,
 	unsatisfy,
 	addGiftToAnswer,
+	satisfied,
 }: {
 	postsList: any[];
 	setPostList: Function;
-	activeUser: activeUser;
+	activeUser: any;
 	showDropDown: boolean;
 	setShowDropDown: Function;
 	showAnswerDropDown: Number;
@@ -585,8 +613,9 @@ const NewsFeed = ({
 	upVoteQuestion: Function;
 	unsatisfy: Function;
 	addGiftToAnswer: Function;
+	satisfied: Function;
 }) => {
-	const [gift, setGift] = React.useState(2);
+	const [gift, setGift] = React.useState(5);
 	const [open, setOpen] = React.useState(false);
 	const [openAnswerGift, setOpenAnswerGift] = React.useState(false);
 	const [activeIndex, setActiveIndex] = React.useState(-1);
@@ -628,7 +657,21 @@ const NewsFeed = ({
 		}
 		return bounty;
 	};
-
+	const checkIfEligibleForSatisfied = (index: number) => {
+		if (
+			postsList[index].id === activeUser.id &&
+			postsList[index].bounty !== 0
+		) {
+			return true;
+		} else if (
+			postsList[index].gifts.findIndex(
+				(ittt: any) => ittt.giftedBy === activeUser.id
+			) >= 0
+		) {
+			return true;
+		}
+		return false;
+	};
 	// const showError = () => {};
 	const CheckForGiftOrSatisfied = (item: any) => {
 		let flag = false;
@@ -645,6 +688,16 @@ const NewsFeed = ({
 			}
 		}
 		return flag;
+	};
+	const findTotalGiftValue = (qindex: number, innerIndex: number) => {
+		let number = 0;
+		let listOfGifts: any = [...postsList[qindex].answers[innerIndex].gifts];
+		listOfGifts.forEach((element: any) => {
+			if (element.giftedBy === activeUser.id) {
+				number += element.giftAmount;
+			}
+		});
+		return number;
 	};
 	return (
 		<div className={styles.dashboardContent}>
@@ -946,17 +999,20 @@ const NewsFeed = ({
 													unsatisfy(index);
 												}}
 											>
-												<img
-													src="/gift-box.png"
-													alt="return"
+												<span
 													style={{
-														height: 22,
-														objectFit: "contain",
+														color: "#ff0800",
+														fontSize: 13,
+														paddingRight: 5,
+													}}
+												>
+													Remove Gift
+												</span>{" "}
+												<AiFillGift
+													style={{
+														color: "#ff0800",
 													}}
 												/>
-												<span style={{ color: "#ad71ef", fontSize: 13 }}>
-													Unsatisfied
-												</span>
 											</div>
 										</Popover>
 									) : (
@@ -1024,11 +1080,9 @@ const NewsFeed = ({
 							</div>
 						</div>
 						<div>
-							{item.id !== activeUser.id && (
-								<AnswerTheQuestion
-									{...{ postsList, setPostList, activeUser, index }}
-								/>
-							)}
+							<AnswerTheQuestion
+								{...{ postsList, setPostList, activeUser, index }}
+							/>
 						</div>
 						{openAnswer === index && (
 							<div style={{ marginTop: 10 }}>
@@ -1096,39 +1150,6 @@ const NewsFeed = ({
 																? styles.answerUpVote
 																: styles.answerUpVoted
 														}
-														// onMouseEnter={() => {
-														// 	let temp = [...postsList];
-														// 	if (
-														// 		temp[index].answers[
-														// 			innerIdex
-														// 		].answerVotes.findIndex(
-														// 			(itm: string) => itm === activeUser.id
-														// 		) < 0
-														// 	) {
-														// 		temp[index].answers[innerIdex].answerVotes.push(
-														// 			activeUser.id
-														// 		);
-														// 		setPostList(temp);
-														// 	}
-														// }}
-														// onMouseLeave={() => {
-														// 	let temp = [...postsList];
-														// 	if (
-														// 		temp[index].answers[
-														// 			innerIdex
-														// 		].answerVotes.findIndex(
-														// 			(itm: string) => itm === activeUser.id
-														// 		) >= 0
-														// 	) {
-														// 		temp[index].answers[innerIdex].answerVotes =
-														// 			temp[index].answers[
-														// 				innerIdex
-														// 			].answerVotes.filter(
-														// 				(ittm: string) => ittm !== activeUser.id
-														// 			);
-														// 		setPostList(temp);
-														// 	}
-														// }}
 														onClick={() => {
 															let temp = [...postsList];
 															if (
@@ -1191,17 +1212,54 @@ const NewsFeed = ({
 																		paddingTop: 5,
 																	}}
 																>
-																	{innerItem.gifts.length > 0
-																		? innerItem.gifts.find(
-																				(answerGift: any) =>
-																					answerGift.giftedBy === activeUser.id
-																		  ).giftAmount
-																		: "Add Gift"}
+																	{findTotalGiftValue(index, innerIdex) > 0
+																		? findTotalGiftValue(index, innerIdex)
+																		: "Send Gift"}
 																</span>
 																<FaGift />
 															</div>
 														</Popover>
 													</div>
+													{checkIfEligibleForSatisfied(index) && (
+														<Popover
+															title={"Are you satisfied with this answer?"}
+															content="Your gift would be sent to this user."
+														>
+															<div
+																onClick={() => {
+																	satisfied(index, innerIdex);
+																}}
+																style={{
+																	flexDirection: "row",
+																	display: "flex",
+																	alignItems: "center",
+																	justifyContent: "center",
+																	cursor: "pointer",
+																	padding: 3,
+																	marginLeft: 5,
+																	marginRight: 5,
+																	borderRadius: 6,
+																	boxShadow:
+																		"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
+																}}
+															>
+																<span
+																	style={{
+																		paddingRight: 5,
+																		color: "#daa3dc",
+																		paddingTop: 5,
+																	}}
+																>
+																	Satisfied
+																</span>
+																<img
+																	alt="giftsatisfied"
+																	src="/gift-box.png"
+																	style={{ width: 30, height: 30 }}
+																/>
+															</div>
+														</Popover>
+													)}
 													<div
 														style={{
 															display: "flex",
@@ -1280,7 +1338,7 @@ const UnAnsweredFeed = ({
 }: {
 	postsList: any[];
 	setPostList: Function;
-	activeUser: activeUser;
+	activeUser: any;
 	showDropDown: boolean;
 	setShowDropDown: Function;
 	showAnswerDropDown: Number;
@@ -1296,6 +1354,8 @@ const UnAnsweredFeed = ({
 
 	const addGiftToQuestion = (call: boolean, completed: string) => {
 		// setOpen(call);
+		// console.log("filter", filterQuestion);
+		// console.log("---", setFilterQuestion);
 		if (completed === "completed") {
 			let temp = [...postsList];
 			temp[activeIndex].gifts.push({
@@ -1613,16 +1673,17 @@ const UnAnsweredFeed = ({
 														item.closed ? showError() : unsatisfy(index);
 													}}
 												>
-													<img
+													{/* <img
 														src="/gift-box.png"
 														alt="return"
 														style={{
 															height: 22,
 															objectFit: "contain",
 														}}
-													/>
-													<span style={{ color: "#ad71ef", fontSize: 13 }}>
-														Unsatisfied
+													/> */}
+													<AiFillGift style={{ color: "#ff0800" }} />
+													<span style={{ color: "#ff0800", fontSize: 13 }}>
+														Remove Gift
 													</span>
 												</div>
 											</Popover>
@@ -1649,7 +1710,7 @@ const UnAnsweredFeed = ({
 															paddingLeft: 5,
 														}}
 													>
-														Add Gift
+														Send Gift
 													</span>
 												</div>
 											</Popover>
@@ -2207,18 +2268,18 @@ function QuestionModal({
 }) {
 	const [questionValue, setQuestionValue] = React.useState("");
 	const [questionTitle, setQuestionTitle] = React.useState<string>("");
-	// const [isFocused, setIsFocused] = React.useState<boolean>(false);
 	const [postingAs, setPostingAs] = React.useState<string>("");
-	const [gift, setGift] = React.useState(2);
+	const [gift, setGift] = React.useState(5);
 	const [isTagsVisible, setIsTagVisible] = React.useState<boolean>(false);
 	const [loading, setLoading] = React.useState(false);
 	const [open, setOpen] = React.useState(false);
-	const [targetedUsers, setTargetedUsers] = React.useState("Specific");
+	const [targetedUsers, setTargetedUsers] = React.useState("");
 	const [result, setResult] = React.useState("");
 	const [selectedOptions, setSelectedOptions] = React.useState([]);
+	const [globalState, setGlobalState] = React.useContext<any>(AppContext);
 
 	const addQuestionToList = () => {
-		console.log("callledd");
+		console.log("callledd", setGlobalState);
 		// console.log(questionTitle);
 		// console.log(isFocused);
 		setLoading(true);
@@ -2283,7 +2344,7 @@ function QuestionModal({
 					}}
 				>
 					<Image
-						src={"/profilePic.jpg"}
+						src={globalState.activeUser.url}
 						style={{
 							borderRadius: 75 / 2,
 							objectFit: "cover",
@@ -2308,10 +2369,11 @@ function QuestionModal({
 							color: "#000",
 						}}
 					>
-						Allen O&apos;Daniel
+						{globalState.activeUser.firstName} &nbsp;{" "}
+						{globalState.activeUser.lastName}
 					</span>
 					<span style={{ color: "#dadada", fontWeight: "bold", fontSize: 15 }}>
-						Artist
+						{globalState.activeUser.domain}
 					</span>
 				</div>
 				<div style={{ marginTop: 20, marginBottom: 3, paddingLeft: 5 }}>
@@ -2585,7 +2647,7 @@ function QuestionModal({
 								setOpen(true);
 							}}
 						>
-							Add Gift
+							Send Gift
 							<AddTip
 								open={open}
 								setOpen={setOpen}
@@ -2793,90 +2855,19 @@ const TagsComponent = ({
 	selectedOptions: any;
 	setSelectedOptions: Function;
 }) => {
-	// const [tags, setTags] = React.useState([
-	// 	{ id: "Thailand", text: "Thailand" },
-	// 	{ id: "India", text: "India" },
-	// 	{ id: "Vietnam", text: "Vietnam" },
-	// 	{ id: "Turkey", text: "Turkey" },
-	// ]);
+	const [globalState, setGlobalState] = React.useContext<any>(AppContext);
 
-	// const [availableOptions, setAvailableOptions] = React.useState([
-	// 	{ value: "Burns Bay Road" },
-	// 	{ value: "Downing Street" },
-	// 	{ value: "Wall Street" },
-	// ]);
-	const [dropdownOptions, setDropDownOptions] = React.useState([
-		{
-			value: "Trending",
-		},
-		{
-			value: "Deutschland",
-		},
-		{
-			value: "Memes",
-		},
-		{
-			value: "Wortwitze",
-		},
-		{
-			value: "Lustig!",
-		},
-		{
-			value: "Interessant!",
-		},
-		{
-			value: "Gaming",
-		},
-		{
-			value: "Konsolen",
-		},
-		{
-			value: "Spiele",
-		},
-		{
-			value: "Beliebte Spiele",
-		},
-		{
-			value: "Entertainment",
-		},
-		{
-			value: "Filme",
-		},
-		{
-			value: "TV",
-		},
-		{
-			value: "Sendungen & Serien",
-		},
-		{
-			value: "Fan Theorien",
-		},
-		{
-			value: "Musik",
-		},
-		{
-			value: "Podcasts",
-		},
-		{
-			value: "Youtube",
-		},
-		{
-			value: "Beziehungen",
-		},
-	]);
-	// const [result, setResult] = React.useState("");
-	// const options = [
-	//   { value: "Burns Bay Road" },
-	//   { value: "Downing Street" },
-	//   { value: "Wall Street" }
-	// ];
+	const [dropdownOptions, setDropDownOptions] = React.useState(
+		globalState.topics
+	);
 	const filterOptions = (item: string) => {
-		let ddOptions = dropdownOptions.filter((itt) => itt.value !== item);
+		console.log("just for error", setGlobalState);
+		let ddOptions = dropdownOptions.filter((itt: any) => itt.value !== item);
 		let seleOpt: string[] = [...selectedOptions];
 
 		if (selectedOptions.length > 0) {
 			selectedOptions.forEach((selectedOpt: any) => {
-				ddOptions = ddOptions.filter((item) => item.value !== selectedOpt);
+				ddOptions = ddOptions.filter((item: any) => item.value !== selectedOpt);
 			});
 		}
 		seleOpt.push(item);
@@ -2886,9 +2877,10 @@ const TagsComponent = ({
 	const deletItem = (item: String) => {
 		let newArr = selectedOptions.filter((selectOpt: any) => selectOpt !== item);
 		setSelectedOptions(newArr);
-		let temp = dropdownOptions.filter((itt) => itt.value !== item);
+		let temp = dropdownOptions.filter((itt: any) => itt.value !== item);
 		setDropDownOptions(temp);
 	};
+	const [isTopicModalOpen, setIsTopicModalOpen] = React.useState(false);
 	return (
 		<div
 			style={{
@@ -2896,32 +2888,61 @@ const TagsComponent = ({
 				display: "flex",
 				alignItems: "flex-start",
 				justifyContent: "center",
-				//boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
 				paddingTop: 10,
 				paddingBottom: 15,
 				paddingRight: 10,
 				paddingLeft: 10,
 			}}
 		>
-			<AutoComplete
+			<TopicModal {...{ isTopicModalOpen, setIsTopicModalOpen }} />
+			<div
 				style={{
+					flexDirection: "row",
+					alignItems: "center",
+					justifyContent: "flex-end",
+					display: "flex",
 					width: "100%",
-					border: ".5px solid #bababa",
-					borderRadius: 22,
-					paddingTop: 2.5,
-					paddingBottom: 2.5,
 				}}
-				bordered={false}
-				options={dropdownOptions}
-				// value={result}
-				placeholder="Start by typing "
-				filterOption={(inputValue: any, option: any) =>
-					option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-				}
-				onSelect={(item: any) => {
-					filterOptions(item);
-				}}
-			/>
+			>
+				<AutoComplete
+					style={{
+						width: "100%",
+						border: ".5px solid #bababa",
+						borderRadius: 22,
+						paddingTop: 2.5,
+						paddingBottom: 2.5,
+					}}
+					bordered={false}
+					options={dropdownOptions}
+					placeholder="Search topics..."
+					filterOption={(inputValue: any, option: any) =>
+						option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+					}
+					onSelect={(item: any) => {
+						filterOptions(item);
+					}}
+				/>
+
+				<button
+					style={{
+						fontSize: 9,
+						fontWeight: "bold",
+						borderRadius: 6,
+						marginLeft: 5,
+						width: 90,
+						height: 40,
+						backgroundColor: "#f5f5f5",
+						outline: "none",
+						border: 0,
+						color: "#bababa",
+					}}
+					onClick={() => {
+						setIsTopicModalOpen(true);
+					}}
+				>
+					+ Add Topic
+				</button>
+			</div>
 			<Row style={{ marginTop: 5, width: "100%" }}>
 				{selectedOptions.map((item: any, index: number) => {
 					return (
@@ -3049,9 +3070,10 @@ const AddTip = ({
 							borderRadius: 8,
 							marginBottom: 2,
 							outline: "none",
+							paddingLeft: 10,
 						}}
 					/>
-					{gift < 2 && <span style={{ color: "red" }}>Minimum gift is 2$</span>}
+					{gift < 5 && <span style={{ color: "red" }}>Minimum gift is 5$</span>}
 				</div>
 				{confirmLoading ? (
 					<Spin size="small" />
@@ -3076,10 +3098,10 @@ const AddTip = ({
 							maxWidth: 110,
 							marginLeft: 5,
 						}}
-						disabled={gift < 2}
+						disabled={gift < 5}
 						onClick={handleOk}
 					>
-						<RiCoinsFill style={{ color: "golden" }} /> Add Gift
+						<RiCoinsFill style={{ color: "golden" }} /> Send Gift
 					</button>
 				)}
 			</div>

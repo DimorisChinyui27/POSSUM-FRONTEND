@@ -32,7 +32,7 @@
 }
 .primary{
     width: 100%;
-    background: linear-gradient(to right,#66d1de, #de41f5);    ;
+    background: linear-gradient(to right,#66d1de, #de41f5) ;
     border-radius: 22px;
     border:0px;
     color:#fff;

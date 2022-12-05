@@ -25,8 +25,29 @@ export default function DashboardLayout({
 					backgroundImage: "linear-gradient(to bottom left, #e839f6, #61d8de)",
 					height: 80,
 					marginBottom: 10,
+					alignItems: "center",
+					justifyContent: "flex-start",
+					display: "flex",
+					flexDirection: "row",
+					paddingLeft: 200,
 				}}
-			></Col>
+			>
+				<h1 className={styles.rainbowText}>POSSUM</h1>
+				{/* <span
+					style={{
+						fontSize: 25,
+						fontWeight: "bolder",
+						letterSpacing: 2,
+						paddingLeft: 150,
+					}}
+				>
+					POSSUM
+				</span> */}
+				{/* <img
+					src="/logo.png"
+					style={{ width: 70, height: 50, objectFit: "contain" }}
+				/> */}
+			</Col>
 			<Col xs={24} sm={24} md={24} lg={24} xl={24}>
 				<Row
 					style={{
